@@ -18,13 +18,7 @@ export class AuthService {
                 username: username
             },
         });
-
-        const isMatch = await bcrypt.compare(password, userFirst.password)
-        if (!isMatch) {
-            return {
-                error: "Username or password is not valid"
-            }
-        }
+        if(!userFirst) return{error: "Usernme or password is not valid"}
 
         const { password: userPassword, ...userWithoutPassword } = userFirst;
         const token = this.jwtService.sign(userWithoutPassword);
