@@ -22,6 +22,7 @@ export class AuthService {
 
         if (!userFirst) return { error: "Username or password is not valid" }
 
+
         const { password: userPassword, ...userWithoutPassword } = userFirst;
         const token = this.jwtService.sign(userWithoutPassword);
 
