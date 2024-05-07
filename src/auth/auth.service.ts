@@ -4,6 +4,7 @@ import { PrismaService } from 'src/prisma.service';
 import { CreateUserDto } from 'src/users/dto/create-user.dto';
 import * as bcrypt from "bcrypt"
 import { userValidation } from 'src/util/validation/user';
+import { error } from 'console';
 
 @Injectable()
 export class AuthService {
@@ -19,12 +20,7 @@ export class AuthService {
             },
         });
 
-        const isMatch = await bcrypt.compare(password, userFirst.password)
-        if (!isMatch) {
-            return {
-                error: "Username or password is not valid"
-            }
-        }
+        if (!userFirst) return { error: "Username or password is not valid" }
 
         const { password: userPassword, ...userWithoutPassword } = userFirst;
         const token = this.jwtService.sign(userWithoutPassword);
