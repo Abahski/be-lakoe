@@ -3,46 +3,47 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { PrismaService } from 'src/prisma.service';
 import { Prisma } from '@prisma/client';
 import { userValidation } from 'src/util/validation/user';
-import * as bcrypt from 'bcrypt'
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UsersService {
-  constructor(private prisma: PrismaService) { }
+  constructor(private prisma: PrismaService) {}
 
   async createUser(data: Prisma.UserCreateInput) {
     try {
-      const { error } = userValidation.validate(data)
+      const { error } = userValidation.validate(data);
 
       if (error) {
-        throw new Error(error.details[0].message)
+        throw new Error(error.details[0].message);
       }
 
       const isExists = await this.prisma.user.findFirst({
         where: {
-          OR: [{
-            username: data.username
-          }, {
-            email: data.username
-          }]
-        }
-
-      })
+          OR: [
+            {
+              username: data.username,
+            },
+            {
+              email: data.username,
+            },
+          ],
+        },
+      });
 
       if (isExists) {
-        throw new Error("Username or email already exist")
+        throw new Error('Username or email already exist');
       }
-      const hashBcrypt = await bcrypt.hash(data.password, 2)
-      data.password = hashBcrypt
+      const hashBcrypt = await bcrypt.hash(data.password, 2);
+      data.password = hashBcrypt;
       if (error) {
-        throw new Error(error.details[0].message)
+        throw new Error(error.details[0].message);
       }
 
       return this.prisma.user.create({
-        data
-      })
-
+        data,
+      });
     } catch (error) {
-      throw new Error(`Failed to create user: ${error.message}`)
+      throw new Error(`Failed to create user: ${error.message}`);
     }
   }
 
@@ -50,10 +51,10 @@ export class UsersService {
     try {
       const users = await this.prisma.user.findMany();
       return {
-        data: users
-      }
+        data: users,
+      };
     } catch (error) {
-      throw new Error(`Failed to fetch users: ${error.message}`)
+      throw new Error(`Failed to fetch users: ${error.message}`);
     }
   }
 
@@ -71,12 +72,13 @@ export class UsersService {
   async update(id: number, updateUserDto: UpdateUserDto) {
     try {
       const userId = Number(id);
+      console.log(updateUserDto);
       const user = await this.prisma.user.update({
         where: { id: userId },
         data: updateUserDto,
-      })
+      });
 
-      return user
+      return user;
     } catch (error) {
       throw new Error(`Failed to find user: ${error.message}`);
     }
@@ -86,8 +88,8 @@ export class UsersService {
     try {
       const user = await this.prisma.user.delete({
         where: { id },
-      })
-      return user
+      });
+      return user;
     } catch (error) {
       throw new Error(`Failed to find user: ${error.message}`);
     }
