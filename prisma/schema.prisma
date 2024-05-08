@@ -13,19 +13,25 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model Roles {
+  id   Int    @id @default(autoincrement())
+  name String
+  User User?
+}
+
 model User {
   id         Int       @id @default(autoincrement())
   username   String    @unique
   email      String    @unique
   password   String
   profile    Profile?
+  role_id    Int?      @unique
+  role       Roles?    @relation(fields: [role_id], references: [id])
+  carts      Carts[]
+  invoice    Invoice[]
+  payment    Payment?
   created_at DateTime  @default(now())
   updated_at DateTime  @updatedAt
-  role       Roles     @relation(fields: [role_id], references: [id])
-  role_id    Int       @unique
-  Carts      Carts[]
-  Invoice    Invoice[]
-  Payment    Payment?
 }
 
 model Profile {
@@ -38,12 +44,6 @@ model Profile {
   created_at   DateTime    @default(now())
   updated_at   DateTime    @updatedAt
   Locations    Locations[]
-}
-
-model Roles {
-  id   Int    @id @default(autoincrement())
-  name String
-  User User?
 }
 
 model Products {

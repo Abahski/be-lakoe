@@ -5,7 +5,7 @@ import { Prisma } from '@prisma/client';
 
 @Injectable()
 export class ProfilesService {
-  constructor(private prisma: PrismaService) { }
+  constructor(private prisma: PrismaService) {}
   async createProfile(data: Prisma.ProfileCreateInput) {
     try {
       const result = await this.prisma.profile.create({ data });
@@ -20,20 +20,20 @@ export class ProfilesService {
       const profiles = await this.prisma.profile.findMany({
         select: {
           fullname: true,
-          address: true,
+          locations: true,
           phone_number: true,
           user: {
             select: {
               username: true,
-              email: true
-            }
-          }
+              email: true,
+            },
+          },
         },
       });
 
       return {
-        data: profiles
-      }
+        data: profiles,
+      };
     } catch (error) {
       throw new Error(`Failed to fetch profiles: ${error.message}`);
     }
@@ -49,9 +49,9 @@ export class ProfilesService {
       const profile = await this.prisma.profile.update({
         where: { id: profileId },
         data: updateProfileDto,
-      })
+      });
 
-      return profile
+      return profile;
     } catch (error) {
       throw new Error(`Failed to update profile: ${error.message}`);
     }
