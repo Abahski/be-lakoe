@@ -14,22 +14,257 @@ datasource db {
 }
 
 model User {
-  id         Int      @id @default(autoincrement())
-  username   String   @unique
-  email      String   @unique
+  id         Int       @id @default(autoincrement())
+  username   String    @unique
+  email      String    @unique
   password   String
   profile    Profile?
+  created_at DateTime  @default(now())
+  updated_at DateTime  @updatedAt
+  role       Roles     @relation(fields: [role_id], references: [id])
+  role_id    Int       @unique
+  Carts      Carts[]
+  Invoice    Invoice[]
+  Payment    Payment?
+}
+
+model Profile {
+  id           Int         @id @default(autoincrement())
+  fullname     String?
+  locations    String?
+  phone_number String?
+  user         User        @relation(fields: [userId], references: [id])
+  userId       Int         @unique
+  created_at   DateTime    @default(now())
+  updated_at   DateTime    @updatedAt
+  Locations    Locations[]
+}
+
+model Roles {
+  id   Int    @id @default(autoincrement())
+  name String
+  User User?
+}
+
+model Products {
+  id            Int          @id @default(autoincrement())
+  name          String
+  description   String
+  attachments   String
+  is_active     Boolean
+  minimum_order Int
+  Variant       Variants[]
+  size          String
+  created_at    DateTime     @default(now())
+  updated_at    DateTime     @updatedAt
+  Categories    Categories[]
+}
+
+model Categories {
+  id         Int      @id @default(autoincrement())
+  name       String
+  product    Products @relation(fields: [product_id], references: [id])
+  product_id Int
+}
+
+model Stores {
+  id                  Int                   @id @default(autoincrement())
+  name                String
+  slogan              String
+  description         String
+  domain              String
+  logo_attachment     String
+  banner_attachment   String
+  created_at          DateTime              @default(now())
+  updated_at          DateTime              @updatedAt
+  Carts               Carts[]
+  StoresOnDecorations StoresOnDecorations[]
+  OperationHours      OperationHours[]
+  MessageTemplates    MessageTemplates[]
+  Locations           Locations[]
+  BankAccounts        BankAccounts[]
+}
+
+model Variants {
+  id             Int              @id @default(autoincrement())
+  name           String
+  is_active      Boolean
+  product        Products         @relation(fields: [product_id], references: [id])
+  product_id     Int
+  VariantOptions VariantOptions[]
+  created_at     DateTime         @default(now())
+  updated_at     DateTime         @updatedAt
+}
+
+model VariantOptions {
+  id                  Int                   @id @default(autoincrement())
+  name                String
+  variant             Variants              @relation(fields: [variant_id], references: [id])
+  variant_id          Int
+  created_at          DateTime              @default(now())
+  updated_at          DateTime              @updatedAt
+  VariantOptionValues VariantOptionValues[]
+}
+
+model VariantOptionValues {
+  id                Int            @id @default(autoincrement())
+  sku               String
+  weight            Float
+  stock             Int
+  price             Int
+  variant_option    VariantOptions @relation(fields: [variant_option_id], references: [id])
+  variant_option_id Int
+  created_at        DateTime       @default(now())
+  updated_at        DateTime       @updatedAt
+}
+
+model Carts {
+  id         Int         @id @default(autoincrement())
+  price      Int
+  discounts  Float
+  user       User        @relation(fields: [user_id], references: [id])
+  user_id    Int
+  store      Stores      @relation(fields: [store_id], references: [id])
+  store_id   Int
+  created_at DateTime    @default(now())
+  updated_at DateTime    @updatedAt
+  CartItems  CartItems[]
+  Invoice    Invoice[]
+}
+
+model Decoration {
+  id                  Int                   @id @default(autoincrement())
+  type                String
+  StoresOnDecorations StoresOnDecorations[]
+  created_at          DateTime              @default(now())
+  updated_at          DateTime              @updatedAt
+}
+
+model StoresOnDecorations {
+  id            Int        @id @default(autoincrement())
+  store         Stores     @relation(fields: [store_id], references: [id])
+  store_id      Int
+  decoration    Decoration @relation(fields: [decoration_id], references: [id])
+  decoration_id Int
+  created_at    DateTime   @default(now())
+  updated_at    DateTime   @updatedAt
+}
+
+model OperationHours {
+  id         Int      @id @default(autoincrement())
+  day        String[]
+  open_at    String
+  close_at   String
+  store      Stores   @relation(fields: [store_id], references: [id])
+  store_id   Int
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
 }
 
-model Profile {
-  id           Int      @id @default(autoincrement())
-  fullname     String?
-  address      String?
-  phone_number String?
-  user         User     @relation(fields: [userId], references: [id])
-  userId       Int      @unique
-  created_at   DateTime @default(now())
-  updated_at   DateTime @updatedAt
+model MessageTemplates {
+  id       Int    @id @default(autoincrement())
+  name     String
+  content  String
+  store    Stores @relation(fields: [store_id], references: [id])
+  store_id Int
+}
+
+model Locations {
+  id                Int      @id @default(autoincrement())
+  name              String
+  address           String
+  postal_code       String
+  city_district     String
+  longitude         Float
+  latitude          Float
+  is_main_locations Boolean
+  store             Stores   @relation(fields: [store_id], references: [id])
+  store_id          Int
+  profile           Profile  @relation(fields: [profile_id], references: [id])
+  profile_id        Int
+  created_at        DateTime @default(now())
+  updated_at        DateTime @updatedAt
+}
+
+model BankAccounts {
+  id             Int      @id @default(autoincrement())
+  account_number String   @unique
+  account_name   String
+  store          Stores   @relation(fields: [store_id], references: [id])
+  store_id       Int
+  created_at     DateTime @default(now())
+  updated_at     DateTime @updatedAt
+}
+
+model CartItems {
+  id       Int   @id @default(autoincrement())
+  price    Int
+  quantity Int
+  cart     Carts @relation(fields: [cart_id], references: [id])
+  cart_id  Int
+}
+
+model Payment {
+  id         Int     @id @default(autoincrement())
+  bank       String
+  amount     Int
+  status     String
+  invoice    Invoice @relation(fields: [invoice_id], references: [id])
+  invoice_id Int     @unique
+  user       User    @relation(fields: [user_id], references: [id])
+  user_id    Int     @unique
+}
+
+model Invoice {
+  id                   Int                   @id @default(autoincrement())
+  prices               Int
+  service_charge       Int
+  status               String
+  receiver_longitude   Float
+  receiver_latitude    Float
+  receiver_district    String
+  receiver_phone       String
+  receiver_name        String
+  receiver_address     String
+  cart                 Carts                 @relation(fields: [cart_id], references: [id])
+  cart_id              Int
+  courier_id           Couriers?
+  user                 User                  @relation(fields: [userId], references: [id])
+  userId               Int
+  Payment              Payment?
+  invoice_history      invoice_history[]
+  confirmation_payment confirmation_payment?
+  created_at           DateTime              @default(now())
+  updated_at           DateTime              @updatedAt
+}
+
+model invoice_history {
+  id         Int      @id @default(autoincrement())
+  status     String
+  invoice    Invoice  @relation(fields: [invoice_id], references: [id])
+  invoice_id Int
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+}
+
+model confirmation_payment {
+  id         Int      @id @default(autoincrement())
+  amount     Int
+  bank       String
+  invoice    Invoice  @relation(fields: [invoice_id], references: [id])
+  invoice_id Int      @unique
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+}
+
+model Couriers {
+  id                   Int      @id @default(autoincrement())
+  courier_code         String   @unique
+  courier_service_name String
+  courier_service_code String   @unique
+  price                Int
+  invoice              Invoice  @relation(fields: [invoice_id], references: [id])
+  invoice_id           Int      @unique
+  created_at           DateTime @default(now())
+  updated_at           DateTime @updatedAt
 }
