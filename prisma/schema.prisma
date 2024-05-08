@@ -10,10 +10,11 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
+  url      = "postgresql://postgres:1234@localhost:5432/Lakoe"
 }
 
 model User {
+
   id         Int       @id @default(autoincrement())
   username   String    @unique
   email      String    @unique
@@ -26,6 +27,7 @@ model User {
   Carts      Carts[]
   Invoice    Invoice[]
   Payment    Payment?
+
 }
 
 model Profile {
@@ -267,4 +269,90 @@ model Couriers {
   invoice_id           Int      @unique
   created_at           DateTime @default(now())
   updated_at           DateTime @updatedAt
+}
+
+model Order {
+  id            Int             @id @default(autoincrement())
+  status        String?
+  invoice       String?
+  quantity      String?
+  product       Product         @relation(fields: [productId], references: [id])
+  productId     Int             @unique
+  user          User            @relation(fields: [userId], references: [id])
+  userId        Int             @unique
+  Product_Order Product_Order[]
+  created_at    DateTime        @default(now())
+  updated_at    DateTime        @updatedAt
+}
+
+model Product_Order {
+  id         Int      @id @default(autoincrement())
+  product    Product  @relation(fields: [productId], references: [id])
+  productId  Int
+  order      Order    @relation(fields: [orderId], references: [id])
+  orderId    Int
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+}
+
+model Product {
+  id              Int              @id @default(autoincrement())
+  product_name    String
+  price           Int
+  stock           Int
+  url_product     String
+  sku             String?          @unique
+  description     String?
+  weight          Float
+  long            Float?
+  width           Float?
+  height          Float?
+  TemplateMessage TemplateMessage?
+  ProductImage    ProductImage[]
+  Order           Order?
+  Product_Order   Product_Order[]
+  created_at      DateTime         @default(now())
+  updated_at      DateTime         @updatedAt
+}
+
+model ProductImage {
+  id         Int      @id @default(autoincrement())
+  image      Product  @relation(fields: [productId], references: [id])
+  productId  Int      @unique
+  updated_at DateTime @updatedAt
+}
+
+model InformationSetting {
+  id              Int              @id @default(autoincrement())
+  store_name      String?
+  description     String?
+  slogan          String?
+  image           String?
+  TemplateMessage TemplateMessage?
+  created_at      DateTime         @default(now())
+  updated_at      DateTime         @updatedAt
+}
+
+model LocationSetting {
+  id            Int      @id @default(autoincrement())
+  location_name String?
+  address       String?
+  district      String?
+  postcode      String
+  longitude     Float?
+  latitude      Float?
+  created_at    DateTime @default(now())
+  updated_at    DateTime @updatedAt
+}
+
+model TemplateMessage {
+  id           Int                @id @default(autoincrement())
+  title        String
+  description  String
+  product      Product            @relation(fields: [productId], references: [id])
+  productId    Int                @unique
+  customer     User               @relation(fields: [customerId], references: [id])
+  customerId   Int                @unique
+  store_name   InformationSetting @relation(fields: [store_nameId], references: [id])
+  store_nameId Int                @unique
 }
