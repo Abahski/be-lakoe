@@ -51,9 +51,8 @@ export class UsersController {
     try {
       const userId = Number(id);
       const result = await this.usersService.findOne(userId);
-
       return {
-        data: result,
+        hello: result,
       };
     } catch (error) {
       return {
