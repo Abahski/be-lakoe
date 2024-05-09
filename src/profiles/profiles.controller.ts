@@ -10,7 +10,6 @@ import {
 import { ProfilesService } from './profiles.service';
 import { CreateProfileDto } from './dto/create-profile.dto';
 import { UpdateProfileDto } from './dto/update-profile.dto';
-import { Prisma } from '@prisma/client';
 
 @Controller('profiles')
 export class ProfilesController {
@@ -24,8 +23,6 @@ export class ProfilesController {
   @Get()
   findAll() {
     return this.profilesService.findAll();
-
-  
   }
 
   @Get(':id')
@@ -38,9 +35,7 @@ export class ProfilesController {
     @Param('id') id: string,
     @Body() updateProfileDto: UpdateProfileDto,
   ) {
-
     return this.profilesService.update(+id, updateProfileDto);
-
   }
 
   @Delete(':id')
