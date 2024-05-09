@@ -51,6 +51,7 @@ export class ProductsService {
           minimum_order: true,
         },
       });
+
       return {
         data: products,
       };
