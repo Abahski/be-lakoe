@@ -10,7 +10,6 @@ import {
 import { ProfilesService } from './profiles.service';
 import { CreateProfileDto } from './dto/create-profile.dto';
 import { UpdateProfileDto } from './dto/update-profile.dto';
-import { Prisma } from '@prisma/client';
 
 @Controller('profiles')
 export class ProfilesController {
