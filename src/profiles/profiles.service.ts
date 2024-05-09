@@ -8,6 +8,7 @@ import { CreateProfileDto } from './dto/create-profile.dto';
 export class ProfilesService {
   constructor(private prisma: PrismaService) {}
   async createProfile(createProfileDto: CreateProfileDto) {
+
     try {
       const result = await this.prisma.profile.create({
         data: createProfileDto,
@@ -87,6 +88,7 @@ export class ProfilesService {
       });
 
       return updateProfile;
+
     } catch (error) {
       throw new Error(`Failed to update profile: ${error.message}`);
     }

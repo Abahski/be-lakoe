@@ -24,6 +24,8 @@ export class ProfilesController {
   @Get()
   findAll() {
     return this.profilesService.findAll();
+
+  
   }
 
   @Get(':id')
@@ -36,7 +38,9 @@ export class ProfilesController {
     @Param('id') id: string,
     @Body() updateProfileDto: UpdateProfileDto,
   ) {
+
     return this.profilesService.update(+id, updateProfileDto);
+
   }
 
   @Delete(':id')
