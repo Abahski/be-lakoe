@@ -86,6 +86,8 @@ export class ProductsService {
           minimum_order: true,
         },
       });
+
+      if (!product) return { message: 'Product not found' };
       return product;
     } catch (error) {
       throw new Error(`Failed to find product: ${error.message}`);
@@ -95,12 +97,21 @@ export class ProductsService {
   async update(id: number, updateProductDto: UpdateProductDto) {
     try {
       const productId = Number(id);
-      const product = await this.prisma.products.update({
+
+      const product = await this.prisma.products.findUnique({
+        where: { id: productId },
+      });
+
+      if (!product) {
+        return { message: 'Product not found' };
+      }
+
+      const updateProduct = await this.prisma.products.update({
         where: { id: productId },
         data: updateProductDto,
       });
 
-      return product;
+      return updateProduct;
     } catch (error) {
       throw new Error(`Failed to update product: ${error.message}`);
     }
@@ -109,11 +120,18 @@ export class ProductsService {
   async remove(id: number) {
     try {
       const productId = Number(id);
-      const product = await this.prisma.products.delete({
+      const product = await this.prisma.profile.findUnique({
         where: { id: productId },
       });
 
-      return product;
+      if (!product) {
+        return { message: 'Product not found' };
+      }
+      const deleteProduct = await this.prisma.products.delete({
+        where: { id: productId },
+      });
+
+      return deleteProduct;
     } catch (error) {
       throw new Error(`Failed to delete product: ${error.message}`);
     }

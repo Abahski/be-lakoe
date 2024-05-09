@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { UpdateProfileDto } from './dto/update-profile.dto';
 import { PrismaService } from 'src/prisma.service';
-import { Prisma } from '@prisma/client';
 import { CreateProfileDto } from './dto/create-profile.dto';
 
 @Injectable()
@@ -12,6 +11,7 @@ export class ProfilesService {
       const result = await this.prisma.profile.create({
         data: createProfileDto,
       });
+
       return result;
     } catch (error) {
       throw new Error(`Failed to fetch profiles: ${error.message}`);
