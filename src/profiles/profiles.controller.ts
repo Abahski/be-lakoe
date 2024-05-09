@@ -17,41 +17,15 @@ export class ProfilesController {
   constructor(private readonly profilesService: ProfilesService) {}
 
   @Post()
-  async create(@Body() createProfileDto: CreateProfileDto) {
-    try {
-      const profileCreateInput: Prisma.ProfileCreateInput = {
-        fullname: createProfileDto.fullname,
-        locations: createProfileDto.locations,
-        phone_number: createProfileDto.phone_number,
-        user: { connect: { id: createProfileDto.userId } },
-      };
-
-      const result =
-        await this.profilesService.createProfile(profileCreateInput);
-
-      return {
-        data: result,
-        message: 'profile create success',
-      };
-    } catch (error) {
-      return {
-        error: error.message,
-      };
-    }
+  create(@Body() createProfileDto: CreateProfileDto) {
+    return this.profilesService.createProfile(createProfileDto);
   }
 
   @Get()
-  async findAll() {
-    try {
-      const result = await this.profilesService.findAll();
-      return {
-        data: result.data,
-      };
-    } catch (error) {
-      return {
-        error: error.message,
-      };
-    }
+  findAll() {
+    return this.profilesService.findAll();
+
+  
   }
 
   @Get(':id')
@@ -64,22 +38,9 @@ export class ProfilesController {
     @Param('id') id: string,
     @Body() updateProfileDto: UpdateProfileDto,
   ) {
-    try {
-      const profileId = Number(id);
-      const result = await this.profilesService.update(
-        profileId,
-        updateProfileDto,
-      );
 
-      return {
-        data: result,
-        message: 'update profile success',
-      };
-    } catch (error) {
-      return {
-        error: error.message,
-      };
-    }
+    return this.profilesService.update(+id, updateProfileDto);
+
   }
 
   @Delete(':id')
