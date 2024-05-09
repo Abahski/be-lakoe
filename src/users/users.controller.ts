@@ -6,8 +6,6 @@ import {
   Patch,
   Param,
   Delete,
-  Res,
-  HttpStatus,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -51,9 +49,8 @@ export class UsersController {
     try {
       const userId = Number(id);
       const result = await this.usersService.findOne(userId);
-
       return {
-        data: result,
+        hello: result,
       };
     } catch (error) {
       return {

@@ -53,11 +53,11 @@ model Products {
   attachments   String
   is_active     Boolean
   minimum_order Int
-  Variant       Variants[]
+  variant       Variants[]
   size          String
   created_at    DateTime     @default(now())
   updated_at    DateTime     @updatedAt
-  Categories    Categories[]
+  categories    Categories[]
 }
 
 model Categories {
