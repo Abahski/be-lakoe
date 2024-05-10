@@ -7,6 +7,9 @@ import { AuthModule } from './auth/auth.module';
 import { ProductsModule } from './products/products.module';
 import { VariantsModule } from './variants/variants.module';
 import { VariantOptionsModule } from './variant_options/variant_options.module';
+import { VariantOptionValuesModule } from './variant_option_values/variant_option_values.module';
+import { StoresModule } from './stores/stores.module';
+import { BankAccountModule } from './bank_account/bank_account.module';
 
 @Module({
   imports: [
@@ -16,6 +19,9 @@ import { VariantOptionsModule } from './variant_options/variant_options.module';
     ProductsModule,
     VariantsModule,
     VariantOptionsModule,
+    VariantOptionValuesModule,
+    StoresModule,
+    BankAccountModule,
   ],
   controllers: [AppController],
   providers: [AppService],

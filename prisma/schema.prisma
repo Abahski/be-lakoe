@@ -57,6 +57,8 @@ model Products {
   size          String
   created_at    DateTime     @default(now())
   updated_at    DateTime     @updatedAt
+  store         Stores?      @relation(fields: [store_id], references: [id])
+  store_id      Int?
   categories    Categories[]
 }
 
@@ -83,6 +85,7 @@ model Stores {
   MessageTemplates    MessageTemplates[]
   Locations           Locations[]
   BankAccounts        BankAccounts[]
+  Products            Products[]
 }
 
 model Variants {
@@ -188,6 +191,7 @@ model Locations {
 
 model BankAccounts {
   id             Int      @id @default(autoincrement())
+  bank           String
   account_number String   @unique
   account_name   String
   store          Stores   @relation(fields: [store_id], references: [id])

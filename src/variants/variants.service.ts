@@ -8,11 +8,14 @@ export class VariantsService {
   constructor(private prisma: PrismaService) {}
   async createVariant(createVariantDto: CreateVariantDto) {
     try {
-      const result = await this.prisma.variants.create({
+      const variant = await this.prisma.variants.create({
         data: createVariantDto,
       });
 
-      return result;
+      return {
+        data: variant,
+        message: 'Successfully created variant',
+      };
     } catch (error) {
       throw new Error(`Failed to create variant: ${error.message}`);
     }
@@ -147,7 +150,10 @@ export class VariantsService {
         data: updateVariantDto,
       });
 
-      return updateVariant;
+      return {
+        data: updateVariant,
+        message: 'Successfully updated variant',
+      };
     } catch (error) {
       throw new Error(`Failed to update variant: ${error.message}`);
     }

@@ -12,6 +12,7 @@ export class ProductsService {
       const result = await this.prisma.products.create({
         data: createProductDto,
       });
+
       return result;
     } catch (error) {
       throw new Error(`Failed to create product: ${error.message}`);
@@ -27,6 +28,17 @@ export class ProductsService {
           attachments: true,
           is_active: true,
           minimum_order: true,
+          size: true,
+          store: {
+            select: {
+              name: true,
+              slogan: true,
+              description: true,
+              domain: true,
+              logo_attachment: true,
+              banner_attachment: true,
+            },
+          },
         },
       });
       return {
@@ -49,6 +61,17 @@ export class ProductsService {
           attachments: true,
           is_active: true,
           minimum_order: true,
+          size: true,
+          store: {
+            select: {
+              name: true,
+              slogan: true,
+              description: true,
+              domain: true,
+              logo_attachment: true,
+              banner_attachment: true,
+            },
+          },
         },
       });
 
@@ -72,6 +95,17 @@ export class ProductsService {
           attachments: true,
           is_active: true,
           minimum_order: true,
+          size: true,
+          store: {
+            select: {
+              name: true,
+              slogan: true,
+              description: true,
+              domain: true,
+              logo_attachment: true,
+              banner_attachment: true,
+            },
+          },
         },
       });
 
@@ -93,6 +127,17 @@ export class ProductsService {
           attachments: true,
           is_active: true,
           minimum_order: true,
+          size: true,
+          store: {
+            select: {
+              name: true,
+              slogan: true,
+              description: true,
+              domain: true,
+              logo_attachment: true,
+              banner_attachment: true,
+            },
+          },
         },
       });
 
