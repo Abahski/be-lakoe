@@ -5,6 +5,7 @@ import { UsersModule } from './users/users.module';
 import { ProfilesModule } from './profiles/profiles.module';
 import { AuthModule } from './auth/auth.module';
 import { ProductsModule } from './products/products.module';
+import { CategoriesModule } from './categories/categories.module';
 import { VariantsModule } from './variants/variants.module';
 import { VariantOptionsModule } from './variant_options/variant_options.module';
 import { VariantOptionValuesModule } from './variant_option_values/variant_option_values.module';
@@ -17,6 +18,7 @@ import { BankAccountModule } from './bank_account/bank_account.module';
     ProfilesModule,
     AuthModule,
     ProductsModule,
+    CategoriesModule,
     VariantsModule,
     VariantOptionsModule,
     VariantOptionValuesModule,
