@@ -5,4 +5,5 @@ export class CreateProductDto {
   is_active: boolean;
   minimum_order: number;
   size: string;
+  store_id: number;
 }

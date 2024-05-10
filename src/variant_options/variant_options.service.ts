@@ -12,7 +12,10 @@ export class VariantOptionsService {
         data: createVariantOptionDto,
       });
 
-      return variantOptions;
+      return {
+        data: variantOptions,
+        message: 'Successfully created variant Option',
+      };
     } catch (error) {
       throw new Error(`Failed to create variantOption: ${error.message}`);
     }
@@ -97,7 +100,10 @@ export class VariantOptionsService {
         data: updateVariantOptionDto,
       });
 
-      return updateVariantOption;
+      return {
+        data: updateVariantOption,
+        message: 'Successfully updated variant Option',
+      };
     } catch (error) {
       throw new Error(`Failed to update variantOption: ${error.message}`);
     }
