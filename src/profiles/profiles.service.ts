@@ -11,7 +11,6 @@ export class ProfilesService {
       const result = await this.prisma.profile.create({
         data: createProfileDto,
       });
-
       return result;
     } catch (error) {
       throw new Error(`Failed to fetch profiles: ${error.message}`);
