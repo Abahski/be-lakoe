@@ -8,13 +8,14 @@ export class CategoriesService {
   constructor(private prisma: PrismaService) {}
   async create(createCategoryDto: CreateCategoryDto) {
     try {
-      const result = await this.prisma.categories.create({
+      const categories = await this.prisma.categories.create({
         data: createCategoryDto,
       });
-      console.log(result);
-      return result;
+      return {
+        data: categories,
+      };
     } catch (error) {
-      throw new Error(`Failed to fetch profiles: ${error.message}`);
+      throw new Error(`Failed to created categories: ${error.message}`);
     }
   }
 
@@ -34,8 +35,20 @@ export class CategoriesService {
     }
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} category`;
+  async findOne(id: number) {
+    try {
+      const category = await this.prisma.categories.findUnique({
+        where: { id },
+        select: {
+          name: true,
+          product_id: true,
+        },
+      });
+
+      if (!category) return { message: 'Category not found' };
+    } catch (error) {
+      throw new Error(`Failed to find category: ${error.message}`);
+    }
   }
 
   async update(id: number, updateCategoryDto: UpdateCategoryDto) {
@@ -58,6 +71,25 @@ export class CategoriesService {
       return updatedCategory;
     } catch (error) {
       throw new error('Failed to update category: ' + error.message);
+    }
+  }
+
+  async remove(id: number) {
+    try {
+      const categoryId = Number(id);
+      const category = await this.prisma.categories.findUnique({
+        where: { id: categoryId },
+      });
+      if (!category) {
+        return { message: 'Category not found' };
+      }
+      const deleteCategory = await this.prisma.categories.delete({
+        where: { id: categoryId },
+      });
+
+      return deleteCategory;
+    } catch (error) {
+      throw new Error(`Failed to delete category: ${error}`);
     }
   }
 }

@@ -51,6 +51,7 @@ export class ProductsService {
           minimum_order: true,
         },
       });
+
       return {
         data: products,
       };
@@ -94,6 +95,8 @@ export class ProductsService {
           minimum_order: true,
         },
       });
+
+      if (!product) return { message: 'Product not found' };
       return product;
     } catch (error) {
       throw new Error(`Failed to find product: ${error.message}`);
@@ -126,11 +129,18 @@ export class ProductsService {
   async remove(id: number) {
     try {
       const productId = Number(id);
-      const product = await this.prisma.products.delete({
+      const product = await this.prisma.profile.findUnique({
         where: { id: productId },
       });
 
-      return product;
+      if (!product) {
+        return { message: 'Product not found' };
+      }
+      const deleteProduct = await this.prisma.products.delete({
+        where: { id: productId },
+      });
+
+      return deleteProduct;
     } catch (error) {
       throw new Error(`Failed to delete product: ${error.message}`);
     }
