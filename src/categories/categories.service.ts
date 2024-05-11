@@ -1,19 +1,21 @@
 import { Injectable } from '@nestjs/common';
-import { CreateCategoryDto } from './dto/create-category.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
 import { PrismaService } from 'src/prisma.service';
+import { categoriesValidation } from 'src/util/validation/categories';
+import { CreateCategoryDto } from './dto/create-category.dto';
 
 @Injectable()
 export class CategoriesService {
   constructor(private prisma: PrismaService) {}
-  async create(createCategoryDto: CreateCategoryDto) {
+  async create(data: CreateCategoryDto) {
     try {
-      const categories = await this.prisma.categories.create({
-        data: createCategoryDto,
-      });
-      return {
-        data: categories,
-      };
+      const { error } = categoriesValidation.validate(data);
+
+      if (error) {
+        throw new Error(error.details[0].message);
+      }
+
+      return this.prisma.categories.create({ data });
     } catch (error) {
       throw new Error(`Failed to created categories: ${error.message}`);
     }
@@ -53,6 +55,11 @@ export class CategoriesService {
 
   async update(id: number, updateCategoryDto: UpdateCategoryDto) {
     try {
+      const { error } = categoriesValidation.validate(updateCategoryDto);
+
+      if (error) {
+        throw new Error(error.details[0].message);
+      }
       const categoryId = Number(id);
 
       const category = await this.prisma.categories.findUnique({
@@ -68,7 +75,10 @@ export class CategoriesService {
         data: updateCategoryDto,
       });
 
-      return updatedCategory;
+      return {
+        data: updatedCategory,
+        message: 'Succesfully update category',
+      };
     } catch (error) {
       throw new error('Failed to update category: ' + error.message);
     }
@@ -87,7 +97,10 @@ export class CategoriesService {
         where: { id: categoryId },
       });
 
-      return deleteCategory;
+      return {
+        data: deleteCategory,
+        message: 'Successfully delete category',
+      };
     } catch (error) {
       throw new Error(`Failed to delete category: ${error}`);
     }

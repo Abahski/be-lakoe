@@ -13,7 +13,7 @@ export class ProductsService {
         data: createProductDto,
       });
 
-      return result;
+      return { data: result, message: 'Succesfully add new product' };
     } catch (error) {
       throw new Error(`Failed to create product: ${error.message}`);
     }
@@ -165,7 +165,10 @@ export class ProductsService {
         data: updateProductDto,
       });
 
-      return updateProduct;
+      return {
+        data: updateProduct,
+        message: 'Successfully update product',
+      };
     } catch (error) {
       throw new Error(`Failed to update product: ${error.message}`);
     }
@@ -185,7 +188,10 @@ export class ProductsService {
         where: { id: productId },
       });
 
-      return deleteProduct;
+      return {
+        data: deleteProduct,
+        message: 'Succesfully delete a product(s)',
+      };
     } catch (error) {
       throw new Error(`Failed to delete product: ${error.message}`);
     }
