@@ -1,31 +1,38 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { PrismaService } from 'src/prisma.service';
 import { CreateUserDto } from 'src/users/dto/create-user.dto';
-import * as bcrypt from "bcrypt"
+import * as bcrypt from 'bcrypt';
 import { userValidation } from 'src/util/validation/user';
 import { error } from 'console';
 
 @Injectable()
 export class AuthService {
-    constructor(
-        private jwtService: JwtService,
-        private PrismaService: PrismaService
-    ) { }
+  constructor(
+    private jwtService: JwtService,
+    private PrismaService: PrismaService,
+  ) {}
 
-    async validateUser({ username, password }: CreateUserDto) {
-        const userFirst = await this.PrismaService.user.findFirst({
-            where: {
-                username: username
-            },
-        });
+  async validateUser({ username, password }: CreateUserDto) {
+    const userFirst = await this.PrismaService.user.findFirst({
+      where: {
+        username: username,
+      },
+    });
 
-        if (!userFirst) return { error: "Username or password is not valid" }
-
-
-        const { password: userPassword, ...userWithoutPassword } = userFirst;
-        const token = this.jwtService.sign(userWithoutPassword);
-
-        return token;
+    if (!userFirst) {
+      throw new UnauthorizedException('Username or password is not valid');
     }
+
+    const isPasswordValid = await bcrypt.compare(password, userFirst.password);
+
+    if (!isPasswordValid) {
+      throw new UnauthorizedException('Username or password is not valid');
+    }
+
+    const { password: userPassword, ...userWithoutPassword } = userFirst;
+    const token = this.jwtService.sign(userWithoutPassword);
+
+    return token;
+  }
 }
