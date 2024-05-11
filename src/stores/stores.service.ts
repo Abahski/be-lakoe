@@ -53,6 +53,8 @@ export class StoresService {
           banner_attachment: true,
         },
       });
+      console.log(store);
+
       return {
         data: store,
       };
