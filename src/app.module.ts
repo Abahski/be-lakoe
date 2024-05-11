@@ -11,6 +11,8 @@ import { VariantOptionsModule } from './variant_options/variant_options.module';
 import { VariantOptionValuesModule } from './variant_option_values/variant_option_values.module';
 import { StoresModule } from './stores/stores.module';
 import { BankAccountModule } from './bank_account/bank_account.module';
+import { LocationsModule } from './locations/locations.module';
+import { MessageTemplatesModule } from './message-templates/message-templates.module';
 
 @Module({
   imports: [
@@ -24,6 +26,8 @@ import { BankAccountModule } from './bank_account/bank_account.module';
     VariantOptionValuesModule,
     StoresModule,
     BankAccountModule,
+    LocationsModule,
+    MessageTemplatesModule,
   ],
   controllers: [AppController],
   providers: [AppService],

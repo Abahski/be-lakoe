@@ -74,9 +74,9 @@ model Stores {
   name                String
   slogan              String
   description         String
-  domain              String
+  domain              String?
   logo_attachment     String
-  banner_attachment   String
+  banner_attachment   String?
   created_at          DateTime              @default(now())
   updated_at          DateTime              @updatedAt
   Carts               Carts[]
