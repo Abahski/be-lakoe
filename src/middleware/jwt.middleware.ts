@@ -24,6 +24,7 @@ export class JwtMiddleware implements NestMiddleware {
         });
       }
       const decoded = this.jwtService.verify(token, { secret: 'abc123' });
+      req.user = decoded;
       if (!decoded) {
         return res.status(401).json({
           status: false,

@@ -22,12 +22,12 @@ import { JwtMiddleware } from './middleware/jwt.middleware';
 import { JwtModule, JwtService } from '@nestjs/jwt';
 import { ProductsController } from './products/products.controller';
 import { ProfilesController } from './profiles/profiles.controller';
-import { UsersController } from './users/users.controller';
 import { StoresController } from './stores/stores.controller';
 import { VariantOptionValuesController } from './variant_option_values/variant_option_values.controller';
 import { VariantOptionsController } from './variant_options/variant_options.controller';
 import { VariantsController } from './variants/variants.controller';
 import { BankAccountController } from './bank_account/bank_account.controller';
+import { RolesModule } from './roles/roles.module';
 
 @Module({
   imports: [
@@ -47,6 +47,7 @@ import { BankAccountController } from './bank_account/bank_account.controller';
       secret: 'abc123',
       signOptions: { expiresIn: '4h' },
     }),
+    RolesModule,
   ],
   controllers: [AppController],
   providers: [AppService, JwtService],
@@ -54,7 +55,6 @@ import { BankAccountController } from './bank_account/bank_account.controller';
 })
 export class AppModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply(JwtMiddleware).forRoutes(UsersController);
     consumer.apply(JwtMiddleware).forRoutes(ProfilesController);
     consumer.apply(JwtMiddleware).forRoutes(ProductsController);
     consumer.apply(JwtMiddleware).forRoutes(StoresController);

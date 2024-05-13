@@ -24,5 +24,5 @@ export const productValidation = Joi.object({
   is_active: Joi.boolean().required(),
   minimum_order: Joi.number().required(),
   size: Joi.string().required(),
-  store_id: Joi.number().required(),
+  store_id: Joi.number(),
 });
