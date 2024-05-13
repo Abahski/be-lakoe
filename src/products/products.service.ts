@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { PrismaService } from 'src/prisma.service';
 import { CreateProductDto } from './dto/create-product.dto';
@@ -11,27 +11,16 @@ export class ProductsService {
   async createProduct(createProductDto: CreateProductDto) {
     try {
       const { error, value } = productValidation.validate(createProductDto);
-
       if (error) {
         return {
           message: error.details[0].message,
         };
       }
 
-      const { store_id } = value;
-
-      const existingStore = await this.prisma.stores.findUnique({
-        where: { id: store_id },
-      });
-
-      if (!existingStore) {
-        return {
-          message: 'Invalid store provided.',
-        };
-      }
-
       const product = await this.prisma.products.create({
-        data: value,
+        data: {
+          ...value,
+        },
       });
 
       return {

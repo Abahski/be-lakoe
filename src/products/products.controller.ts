@@ -10,13 +10,20 @@ import {
 import { ProductsService } from './products.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
+import { UserSelector } from 'src/users/decorators/user.decorator';
+import { User } from 'src/users/interfaces/user';
 
 @Controller('products')
 export class ProductsController {
   constructor(private readonly productsService: ProductsService) {}
 
   @Post()
-  create(@Body() createProductDto: CreateProductDto) {
+  create(
+    @Body() createProductDto: CreateProductDto,
+    // @UserSelector() user: User,
+  ) {
+    // const currentUser = user.id;
+    // createProductDto.store_id = currentUser;
     return this.productsService.createProduct(createProductDto);
   }
 
