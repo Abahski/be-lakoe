@@ -7,9 +7,9 @@ const isValidImageExtension = (value: string) => {
   return ext && allowedExtensions.includes(ext);
 };
 
-export const productValidation = Joi.object({
-  name: Joi.string().required(),
-  description: Joi.string().required(),
+export const productUpdateValidation = Joi.object({
+  name: Joi.string().optional(),
+  description: Joi.string().optional().max(3000),
   attachments: Joi.string()
     .custom((value: string, helpers) => {
       if (!isValidImageExtension(value)) {
@@ -21,8 +21,8 @@ export const productValidation = Joi.object({
       'any.invalid':
         'Invalid image format. Only JPG, JPEG, PNG, or GIF formats are allowed',
     }),
-  is_active: Joi.boolean().required(),
-  minimum_order: Joi.number().required(),
-  size: Joi.string().required(),
+  is_active: Joi.boolean().optional(),
+  minimum_order: Joi.number().optional(),
+  size: Joi.string().optional(),
   store_id: Joi.number(),
 });

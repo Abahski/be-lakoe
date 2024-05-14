@@ -72,7 +72,7 @@ model Categories {
 
 model Stores {
   id                  Int                   @id @default(autoincrement())
-  name                String
+  name                String  @unique
   slogan              String
   description         String
   domain              String?

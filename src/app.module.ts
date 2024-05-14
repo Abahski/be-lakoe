@@ -1,9 +1,4 @@
-import {
-  MiddlewareConsumer,
-  Module,
-  // NestModule,
-  // RequestMethod,
-} from '@nestjs/common';
+import { MiddlewareConsumer, Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UsersModule } from './users/users.module';
@@ -28,6 +23,11 @@ import { VariantOptionsController } from './variant_options/variant_options.cont
 import { VariantsController } from './variants/variants.controller';
 import { BankAccountController } from './bank_account/bank_account.controller';
 import { RolesModule } from './roles/roles.module';
+import { ConfirmationPaymentsModule } from './confirmation_payments/confirmation_payments.module';
+import { InvoiceHistoriesModule } from './invoice_histories/invoice_histories.module';
+import { DecorationModule } from './decoration/decoration.module';
+import { StoreOnDecorationModule } from './store_on_decoration/store_on_decoration.module';
+import { LocationsController } from './locations/locations.controller';
 import { CartsModule } from './carts/carts.module';
 import { CartItemsModule } from './cart-items/cart-items.module';
 import { CartsController } from './carts/carts.controller';
@@ -53,6 +53,11 @@ import { RolesController } from './roles/roles.controller';
       secret: 'abc123',
       signOptions: { expiresIn: '4h' },
     }),
+    RolesModule,
+    ConfirmationPaymentsModule,
+    InvoiceHistoriesModule,
+    DecorationModule,
+    StoreOnDecorationModule,
     CartsModule,
     CartItemsModule,
   ],
@@ -69,6 +74,11 @@ export class AppModule {
     consumer.apply(JwtMiddleware).forRoutes(VariantOptionsController);
     consumer.apply(JwtMiddleware).forRoutes(VariantOptionValuesController);
     consumer.apply(JwtMiddleware).forRoutes(BankAccountController);
+    consumer.apply(JwtMiddleware).forRoutes(LocationsController);
+    consumer.apply(JwtMiddleware).forRoutes(ConfirmationPaymentsModule);
+    consumer.apply(JwtMiddleware).forRoutes(InvoiceHistoriesModule);
+    consumer.apply(JwtMiddleware).forRoutes(DecorationModule);
+    consumer.apply(JwtMiddleware).forRoutes(StoreOnDecorationModule);
     consumer.apply(JwtMiddleware).forRoutes(CartsController);
     consumer.apply(JwtMiddleware).forRoutes(CartItemsController);
     consumer.apply(JwtMiddleware).forRoutes(RolesController);

@@ -2,7 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { PrismaService } from 'src/prisma.service';
 import { CreateProductDto } from './dto/create-product.dto';
-import { productValidation } from 'src/util/validation/product';
+import { productValidation } from 'src/util/validation/products/productCreate';
+import { productUpdateValidation } from 'src/util/validation/products/productUpdate';
 
 @Injectable()
 export class ProductsService {
@@ -185,6 +186,13 @@ export class ProductsService {
 
   async update(id: number, updateProductDto: UpdateProductDto) {
     try {
+      const { error, value } =
+        productUpdateValidation.validate(updateProductDto);
+      if (error) {
+        return {
+          message: error.details[0].message,
+        };
+      }
       const productId = Number(id);
 
       const product = await this.prisma.products.findUnique({
@@ -197,12 +205,12 @@ export class ProductsService {
 
       const updateProduct = await this.prisma.products.update({
         where: { id: productId },
-        data: updateProductDto,
+        data: value,
       });
 
       return {
         data: updateProduct,
-        message: 'Successfully updated product',
+        message: 'Successfully update product',
       };
     } catch (error) {
       throw new Error(`Failed to update product: ${error.message}`);
@@ -225,7 +233,7 @@ export class ProductsService {
 
       return {
         data: deleteProduct,
-        message: 'Successfully deleted product',
+        message: 'Succesfully delete a product(s)',
       };
     } catch (error) {
       throw new Error(`Failed to delete product: ${error.message}`);

@@ -12,8 +12,6 @@ import {
 import { ProductsService } from './products.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
-import { FileInterceptor } from '@nestjs/platform-express/multer';
-import { diskStorage } from 'multer';
 
 @Controller('products')
 export class ProductsController {
