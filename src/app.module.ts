@@ -16,6 +16,8 @@ import { VariantOptionsModule } from './variant_options/variant_options.module';
 import { VariantOptionValuesModule } from './variant_option_values/variant_option_values.module';
 import { StoresModule } from './stores/stores.module';
 import { BankAccountModule } from './bank_account/bank_account.module';
+import { LocationsModule } from './locations/locations.module';
+import { MessageTemplatesModule } from './message-templates/message-templates.module';
 import { JwtMiddleware } from './middleware/jwt.middleware';
 import { JwtModule, JwtService } from '@nestjs/jwt';
 import { ProductsController } from './products/products.controller';
@@ -26,6 +28,11 @@ import { VariantOptionsController } from './variant_options/variant_options.cont
 import { VariantsController } from './variants/variants.controller';
 import { BankAccountController } from './bank_account/bank_account.controller';
 import { RolesModule } from './roles/roles.module';
+import { CartsModule } from './carts/carts.module';
+import { CartItemsModule } from './cart-items/cart-items.module';
+import { CartsController } from './carts/carts.controller';
+import { CartItemsController } from './cart-items/cart-items.controller';
+import { RolesController } from './roles/roles.controller';
 
 @Module({
   imports: [
@@ -39,11 +46,15 @@ import { RolesModule } from './roles/roles.module';
     VariantOptionValuesModule,
     StoresModule,
     BankAccountModule,
+    LocationsModule,
+    MessageTemplatesModule,
     RolesModule,
     JwtModule.register({
       secret: 'abc123',
       signOptions: { expiresIn: '4h' },
     }),
+    CartsModule,
+    CartItemsModule,
   ],
   controllers: [AppController],
   providers: [AppService, JwtService],
@@ -58,5 +69,8 @@ export class AppModule {
     consumer.apply(JwtMiddleware).forRoutes(VariantOptionsController);
     consumer.apply(JwtMiddleware).forRoutes(VariantOptionValuesController);
     consumer.apply(JwtMiddleware).forRoutes(BankAccountController);
+    consumer.apply(JwtMiddleware).forRoutes(CartsController);
+    consumer.apply(JwtMiddleware).forRoutes(CartItemsController);
+    consumer.apply(JwtMiddleware).forRoutes(RolesController);
   }
 }
