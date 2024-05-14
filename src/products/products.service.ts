@@ -11,16 +11,36 @@ export class ProductsService {
 
   async createProduct(createProductDto: CreateProductDto) {
     try {
+      let imageData = createProductDto.attachments;
+      const attachments = createProductDto.attachments;
+      console.log(attachments, 'ini test');
+      if (attachments && attachments) {
+        imageData = attachments;
+      }
       const { error, value } = productValidation.validate(createProductDto);
+
       if (error) {
         return {
           message: error.details[0].message,
         };
       }
 
+      // const { store_id } = value;
+
+      // const existingStore = await this.prisma.stores.findUnique({
+      //   where: { id: store_id },
+      // });
+
+      // if (!existingStore) {
+      //   return {
+      //     message: 'Invalid store provided.',
+      //   };
+      // }
+
       const product = await this.prisma.products.create({
         data: {
           ...value,
+          attachments: imageData,
         },
       });
 

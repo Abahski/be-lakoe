@@ -28,22 +28,26 @@ export class RolesService {
     }
   }
 
-  findAll() {
-    const roles = this.prisma.roles.findMany({
-      select: {
-        id: true,
-        name: true,
-      },
-    });
+  async findAll() {
+    try {
+      const roles = await this.prisma.roles.findMany({
+        select: {
+          id: true,
+          name: true,
+        },
+      });
 
-    return {
-      data: roles,
-    };
+      return {
+        data: roles,
+      };
+    } catch (error) {
+      throw new Error(`Failed to find role: ${error.message}`);
+    }
   }
 
   async findOne(id: number) {
     try {
-      const role = this.prisma.roles.findUnique({
+      const role = await this.prisma.roles.findUnique({
         where: {
           id: id,
         },

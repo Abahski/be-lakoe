@@ -28,6 +28,11 @@ import { InvoiceHistoriesModule } from './invoice_histories/invoice_histories.mo
 import { DecorationModule } from './decoration/decoration.module';
 import { StoreOnDecorationModule } from './store_on_decoration/store_on_decoration.module';
 import { LocationsController } from './locations/locations.controller';
+import { CartsModule } from './carts/carts.module';
+import { CartItemsModule } from './cart-items/cart-items.module';
+import { CartsController } from './carts/carts.controller';
+import { CartItemsController } from './cart-items/cart-items.controller';
+import { RolesController } from './roles/roles.controller';
 
 @Module({
   imports: [
@@ -43,6 +48,7 @@ import { LocationsController } from './locations/locations.controller';
     BankAccountModule,
     LocationsModule,
     MessageTemplatesModule,
+    RolesModule,
     JwtModule.register({
       secret: 'abc123',
       signOptions: { expiresIn: '4h' },
@@ -52,6 +58,8 @@ import { LocationsController } from './locations/locations.controller';
     InvoiceHistoriesModule,
     DecorationModule,
     StoreOnDecorationModule,
+    CartsModule,
+    CartItemsModule,
   ],
   controllers: [AppController],
   providers: [AppService, JwtService],
@@ -71,5 +79,8 @@ export class AppModule {
     consumer.apply(JwtMiddleware).forRoutes(InvoiceHistoriesModule);
     consumer.apply(JwtMiddleware).forRoutes(DecorationModule);
     consumer.apply(JwtMiddleware).forRoutes(StoreOnDecorationModule);
+    consumer.apply(JwtMiddleware).forRoutes(CartsController);
+    consumer.apply(JwtMiddleware).forRoutes(CartItemsController);
+    consumer.apply(JwtMiddleware).forRoutes(RolesController);
   }
 }

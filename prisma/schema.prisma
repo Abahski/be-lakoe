@@ -20,18 +20,19 @@ model Roles {
 }
 
 model User {
-  id         Int       @id @default(autoincrement())
-  username   String    @unique
-  email      String    @unique
+  id         Int         @id @default(autoincrement())
+  username   String      @unique
+  email      String      @unique
   password   String
   profile    Profile?
-  role_id    Int?      @unique
-  role       Roles?    @relation(fields: [role_id], references: [id])
+  role_id    Int?        @unique
+  role       Roles?      @relation(fields: [role_id], references: [id])
   carts      Carts[]
   invoice    Invoice[]
   payment    Payment?
-  created_at DateTime  @default(now())
-  updated_at DateTime  @updatedAt
+  created_at DateTime    @default(now())
+  updated_at DateTime    @updatedAt
+  CartItems  CartItems[]
 }
 
 model Profile {
@@ -86,6 +87,7 @@ model Stores {
   Locations           Locations[]
   BankAccounts        BankAccounts[]
   Products            Products[]
+  CartItems           CartItems[]
 }
 
 model Variants {
@@ -119,6 +121,7 @@ model VariantOptionValues {
   variant_option_id Int
   created_at        DateTime       @default(now())
   updated_at        DateTime       @updatedAt
+  CartItems         CartItems[]
 }
 
 model Carts {
@@ -201,11 +204,17 @@ model BankAccounts {
 }
 
 model CartItems {
-  id       Int   @id @default(autoincrement())
-  price    Int
-  quantity Int
-  cart     Carts @relation(fields: [cart_id], references: [id])
-  cart_id  Int
+  id                      Int                 @id @default(autoincrement())
+  price                   Int
+  quantity                Int
+  cart                    Carts               @relation(fields: [cart_id], references: [id])
+  cart_id                 Int
+  user                    User                @relation(fields: [user_id], references: [id])
+  user_id                 Int
+  store                   Stores              @relation(fields: [store_id], references: [id])
+  store_id                Int
+  variant_option_value    VariantOptionValues @relation(fields: [variant_option_value_id], references: [id])
+  variant_option_value_id Int
 }
 
 model Payment {

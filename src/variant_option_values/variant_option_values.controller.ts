@@ -1,11 +1,21 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+} from '@nestjs/common';
 import { VariantOptionValuesService } from './variant_option_values.service';
 import { CreateVariantOptionValueDto } from './dto/create-variant_option_value.dto';
 import { UpdateVariantOptionValueDto } from './dto/update-variant_option_value.dto';
 
 @Controller('variant-option-values')
 export class VariantOptionValuesController {
-  constructor(private readonly variantOptionValuesService: VariantOptionValuesService) {}
+  constructor(
+    private readonly variantOptionValuesService: VariantOptionValuesService,
+  ) {}
 
   @Post()
   create(@Body() createVariantOptionValueDto: CreateVariantOptionValueDto) {
@@ -23,8 +33,14 @@ export class VariantOptionValuesController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateVariantOptionValueDto: UpdateVariantOptionValueDto) {
-    return this.variantOptionValuesService.update(+id, updateVariantOptionValueDto);
+  update(
+    @Param('id') id: string,
+    @Body() updateVariantOptionValueDto: UpdateVariantOptionValueDto,
+  ) {
+    return this.variantOptionValuesService.update(
+      +id,
+      updateVariantOptionValueDto,
+    );
   }
 
   @Delete(':id')
