@@ -1,13 +1,19 @@
 import { Injectable } from '@nestjs/common';
 import { UpdateCategoryDto } from './dto/update-category.dto';
 import { PrismaService } from 'src/prisma.service';
-import { categoriesValidation } from 'src/util/validation/categories';
+import { categoriesValidation } from 'src/util/validation/categories/categoriesCreate';
 import { CreateCategoryDto } from './dto/create-category.dto';
 
 @Injectable()
 export class CategoriesService {
   constructor(private prisma: PrismaService) {}
   async create(data: CreateCategoryDto) {
+    const { error } = categoriesValidation.validate(CreateCategoryDto);
+
+    if (error) {
+      throw new Error(error.details[0].message);
+    }
+
     try {
       const { error } = categoriesValidation.validate(data);
 

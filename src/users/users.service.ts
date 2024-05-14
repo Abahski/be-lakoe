@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma.service';
 import { Prisma } from '@prisma/client';
-import { userValidation } from 'src/util/validation/user';
+import { userValidation } from 'src/util/validation/users/usersCreate';
 import * as bcrypt from 'bcrypt';
-import { userUpdateValidation } from 'src/util/validation/usersUpdate';
+import { userUpdateValidation } from 'src/util/validation/users/usersUpdate';
 
 @Injectable()
 export class UsersService {

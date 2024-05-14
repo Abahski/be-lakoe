@@ -2,12 +2,29 @@ import { Injectable } from '@nestjs/common';
 import { CreateBankAccountDto } from './dto/create-bank_account.dto';
 import { UpdateBankAccountDto } from './dto/update-bank_account.dto';
 import { PrismaService } from 'src/prisma.service';
+import { bankValidation } from 'src/util/validation/banks/bankCreate';
 
 @Injectable()
 export class BankAccountService {
   constructor(private readonly prisma: PrismaService) {}
   async create(createBankAccountDto: CreateBankAccountDto) {
     try {
+      const { error } = bankValidation.validate(createBankAccountDto);
+
+      if (error) {
+        throw new Error(error.details[0].message);
+      }
+
+      const isExists = await this.prisma.bankAccounts.findFirst({
+        where: {
+          account_number: createBankAccountDto.account_number,
+        },
+      });
+
+      if (isExists) {
+        throw new Error('Account number has been used');
+      }
+
       const bankAccount = await this.prisma.bankAccounts.create({
         data: createBankAccountDto,
       });
@@ -81,6 +98,21 @@ export class BankAccountService {
 
   async update(id: number, updateBankAccountDto: UpdateBankAccountDto) {
     try {
+      const { error } = bankValidation.validate(updateBankAccountDto);
+
+      if (error) {
+        throw new Error(error.details[0].message);
+      }
+
+      const isExists = await this.prisma.bankAccounts.findFirst({
+        where: {
+          account_number: updateBankAccountDto.account_number,
+        },
+      });
+
+      if (isExists) {
+        throw new Error('Account number has been used');
+      }
       const bankAccountId = Number(id);
       const bankAccount = await this.prisma.bankAccounts.findUnique({
         where: { id: bankAccountId },

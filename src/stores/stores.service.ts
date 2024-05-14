@@ -2,12 +2,28 @@ import { Injectable } from '@nestjs/common';
 import { CreateStoreDto } from './dto/create-store.dto';
 import { UpdateStoreDto } from './dto/update-store.dto';
 import { PrismaService } from 'src/prisma.service';
+import { storeValidation } from 'src/util/validation/stores/store';
 
 @Injectable()
 export class StoresService {
   constructor(private readonly prisma: PrismaService) {}
   async create(createStoreDto: CreateStoreDto) {
     try {
+      const { error } = storeValidation.validate(CreateStoreDto);
+      if (error) {
+        throw new Error(error.details[0].message);
+      }
+
+      const isExists = await this.prisma.stores.findFirst({
+        where: {
+          name: CreateStoreDto.name,
+        },
+      });
+
+      if (isExists) {
+        throw new Error('Store name already exist');
+      }
+
       const store = await this.prisma.stores.create({
         data: createStoreDto,
       });
@@ -53,6 +69,8 @@ export class StoresService {
           banner_attachment: true,
         },
       });
+      console.log(store);
+
       return {
         data: store,
       };

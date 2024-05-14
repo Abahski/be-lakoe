@@ -11,6 +11,8 @@ import { VariantOptionsModule } from './variant_options/variant_options.module';
 import { VariantOptionValuesModule } from './variant_option_values/variant_option_values.module';
 import { StoresModule } from './stores/stores.module';
 import { BankAccountModule } from './bank_account/bank_account.module';
+import { LocationsModule } from './locations/locations.module';
+import { MessageTemplatesModule } from './message-templates/message-templates.module';
 import { JwtMiddleware } from './middleware/jwt.middleware';
 import { JwtModule, JwtService } from '@nestjs/jwt';
 import { ProductsController } from './products/products.controller';
@@ -20,6 +22,12 @@ import { VariantOptionValuesController } from './variant_option_values/variant_o
 import { VariantOptionsController } from './variant_options/variant_options.controller';
 import { VariantsController } from './variants/variants.controller';
 import { BankAccountController } from './bank_account/bank_account.controller';
+import { RolesModule } from './roles/roles.module';
+import { ConfirmationPaymentsModule } from './confirmation_payments/confirmation_payments.module';
+import { InvoiceHistoriesModule } from './invoice_histories/invoice_histories.module';
+import { DecorationModule } from './decoration/decoration.module';
+import { StoreOnDecorationModule } from './store_on_decoration/store_on_decoration.module';
+import { LocationsController } from './locations/locations.controller';
 
 @Module({
   imports: [
@@ -33,10 +41,17 @@ import { BankAccountController } from './bank_account/bank_account.controller';
     VariantOptionValuesModule,
     StoresModule,
     BankAccountModule,
+    LocationsModule,
+    MessageTemplatesModule,
     JwtModule.register({
       secret: 'abc123',
       signOptions: { expiresIn: '4h' },
     }),
+    RolesModule,
+    ConfirmationPaymentsModule,
+    InvoiceHistoriesModule,
+    DecorationModule,
+    StoreOnDecorationModule,
   ],
   controllers: [AppController],
   providers: [AppService, JwtService],
@@ -51,5 +66,10 @@ export class AppModule {
     consumer.apply(JwtMiddleware).forRoutes(VariantOptionsController);
     consumer.apply(JwtMiddleware).forRoutes(VariantOptionValuesController);
     consumer.apply(JwtMiddleware).forRoutes(BankAccountController);
+    consumer.apply(JwtMiddleware).forRoutes(LocationsController);
+    consumer.apply(JwtMiddleware).forRoutes(ConfirmationPaymentsModule);
+    consumer.apply(JwtMiddleware).forRoutes(InvoiceHistoriesModule);
+    consumer.apply(JwtMiddleware).forRoutes(DecorationModule);
+    consumer.apply(JwtMiddleware).forRoutes(StoreOnDecorationModule);
   }
 }

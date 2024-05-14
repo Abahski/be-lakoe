@@ -2,7 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { PrismaService } from 'src/prisma.service';
 import { CreateProductDto } from './dto/create-product.dto';
-import { productValidation } from 'src/util/validation/product';
+import { productValidation } from 'src/util/validation/products/productCreate';
+import { productUpdateValidation } from 'src/util/validation/products/productUpdate';
 
 @Injectable()
 export class ProductsService {
@@ -11,27 +12,16 @@ export class ProductsService {
   async createProduct(createProductDto: CreateProductDto) {
     try {
       const { error, value } = productValidation.validate(createProductDto);
-
       if (error) {
         return {
           message: error.details[0].message,
         };
       }
 
-      const { store_id } = value;
-
-      const existingStore = await this.prisma.stores.findUnique({
-        where: { id: store_id },
-      });
-
-      if (!existingStore) {
-        return {
-          message: 'Invalid store provided.',
-        };
-      }
-
       const product = await this.prisma.products.create({
-        data: value,
+        data: {
+          ...value,
+        },
       });
 
       return {
@@ -176,6 +166,13 @@ export class ProductsService {
 
   async update(id: number, updateProductDto: UpdateProductDto) {
     try {
+      const { error, value } =
+        productUpdateValidation.validate(updateProductDto);
+      if (error) {
+        return {
+          message: error.details[0].message,
+        };
+      }
       const productId = Number(id);
 
       const product = await this.prisma.products.findUnique({
@@ -188,7 +185,7 @@ export class ProductsService {
 
       const updateProduct = await this.prisma.products.update({
         where: { id: productId },
-        data: updateProductDto,
+        data: value,
       });
 
       return {
