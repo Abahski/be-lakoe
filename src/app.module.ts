@@ -39,11 +39,11 @@ import { RolesModule } from './roles/roles.module';
     VariantOptionValuesModule,
     StoresModule,
     BankAccountModule,
+    RolesModule,
     JwtModule.register({
       secret: 'abc123',
       signOptions: { expiresIn: '4h' },
     }),
-    RolesModule,
   ],
   controllers: [AppController],
   providers: [AppService, JwtService],
