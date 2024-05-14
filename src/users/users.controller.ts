@@ -1,12 +1,19 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Res, HttpStatus } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+} from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { User } from './interfaces/user';
 
 @Controller('users')
 export class UsersController {
-  constructor(private readonly usersService: UsersService) { }
+  constructor(private readonly usersService: UsersService) {}
 
   @Post()
   async create(@Body() createUserDto: CreateUserDto) {
@@ -14,26 +21,26 @@ export class UsersController {
       const result = await this.usersService.createUser(createUserDto);
       return {
         data: result,
-        message: 'create user success'
-      }
+        message: 'create user success',
+      };
     } catch (error) {
       return {
-        error: error.message
-      }
+        error: error.message,
+      };
     }
   }
 
   @Get()
   async findAll() {
     try {
-      const result = await this.usersService.findAll()
+      const result = await this.usersService.findAll();
       return {
-        data: result.data
-      }
+        data: result.data,
+      };
     } catch (error) {
       return {
-        error: error.message
-      }
+        error: error.message,
+      };
     }
   }
 
@@ -42,17 +49,15 @@ export class UsersController {
     try {
       const userId = Number(id);
       const result = await this.usersService.findOne(userId);
-
       return {
-        data: result,
+        hello: result,
       };
     } catch (error) {
       return {
-        error: error.message
-      }
+        error: error.message,
+      };
     }
   }
-
 
   @Patch(':id')
   async update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
@@ -61,12 +66,12 @@ export class UsersController {
       const result = await this.usersService.update(userId, updateUserDto);
       return {
         data: result,
-        message: 'update user success'
-      }
+        message: 'update user success',
+      };
     } catch (error) {
       return {
-        error: error.message
-      }
+        error: error.message,
+      };
     }
   }
 
@@ -76,12 +81,12 @@ export class UsersController {
       const userId = Number(id);
       await this.usersService.delete(userId);
       return {
-        message: "delete success"
-      }
+        message: 'delete success',
+      };
     } catch (error) {
       return {
-        error: error.message
-      }
+        error: error.message,
+      };
     }
   }
 }
