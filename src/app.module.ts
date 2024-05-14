@@ -28,6 +28,11 @@ import { VariantOptionsController } from './variant_options/variant_options.cont
 import { VariantsController } from './variants/variants.controller';
 import { BankAccountController } from './bank_account/bank_account.controller';
 import { RolesModule } from './roles/roles.module';
+import { CartsModule } from './carts/carts.module';
+import { CartItemsModule } from './cart-items/cart-items.module';
+import { CartsController } from './carts/carts.controller';
+import { CartItemsController } from './cart-items/cart-items.controller';
+import { RolesController } from './roles/roles.controller';
 
 @Module({
   imports: [
@@ -43,11 +48,13 @@ import { RolesModule } from './roles/roles.module';
     BankAccountModule,
     LocationsModule,
     MessageTemplatesModule,
+    RolesModule,
     JwtModule.register({
       secret: 'abc123',
       signOptions: { expiresIn: '4h' },
     }),
-    RolesModule,
+    CartsModule,
+    CartItemsModule,
   ],
   controllers: [AppController],
   providers: [AppService, JwtService],
@@ -62,5 +69,8 @@ export class AppModule {
     consumer.apply(JwtMiddleware).forRoutes(VariantOptionsController);
     consumer.apply(JwtMiddleware).forRoutes(VariantOptionValuesController);
     consumer.apply(JwtMiddleware).forRoutes(BankAccountController);
+    consumer.apply(JwtMiddleware).forRoutes(CartsController);
+    consumer.apply(JwtMiddleware).forRoutes(CartItemsController);
+    consumer.apply(JwtMiddleware).forRoutes(RolesController);
   }
 }
