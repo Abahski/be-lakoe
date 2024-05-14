@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
-import { UpdateUserDto } from './dto/update-user.dto';
 import { PrismaService } from 'src/prisma.service';
 import { Prisma } from '@prisma/client';
-import { userValidation } from 'src/util/validation/user';
+import { userValidation } from 'src/util/validation/users/usersCreate';
 import * as bcrypt from 'bcrypt';
+import { userUpdateValidation } from 'src/util/validation/users/usersUpdate';
 
 @Injectable()
 export class UsersService {
@@ -69,13 +69,42 @@ export class UsersService {
     }
   }
 
-  async update(id: number, updateUserDto: UpdateUserDto) {
+  async update(id: number, data: Prisma.UserUpdateInput) {
     try {
+      const { error } = userUpdateValidation.validate(data);
       const userId = Number(id);
-      console.log(updateUserDto);
+
+      if (error) {
+        throw new Error(error.details[0].message);
+      }
+
+      const existingUser = await this.prisma.user.findUnique({
+        where: { id: userId },
+      });
+
+      if (!existingUser) {
+        throw new Error(`User with ID ${userId} not found.`);
+      }
+
+      if (data.password) {
+        const plainPassword =
+          typeof data.password === 'string' ? data.password : data.password.set;
+        const hashedPassword = await bcrypt.hash(plainPassword, 10);
+        data.password = hashedPassword;
+      }
+
+      if (data.username && data.username !== existingUser.username) {
+        const existingUsernameUser = await this.prisma.user.findUnique({
+          where: { username: data.username as string },
+        });
+        if (existingUsernameUser) {
+          throw new Error(`Username ${data.username} is already taken.`);
+        }
+      }
+
       const user = await this.prisma.user.update({
         where: { id: userId },
-        data: updateUserDto,
+        data: data,
       });
 
       return user;

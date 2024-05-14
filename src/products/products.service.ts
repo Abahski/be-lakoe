@@ -2,6 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { PrismaService } from 'src/prisma.service';
 import { CreateProductDto } from './dto/create-product.dto';
+import { productValidation } from 'src/util/validation/products/productCreate';
+import { productUpdateValidation } from 'src/util/validation/products/productUpdate';
 
 @Injectable()
 export class ProductsService {
@@ -9,10 +11,23 @@ export class ProductsService {
 
   async createProduct(createProductDto: CreateProductDto) {
     try {
-      const result = await this.prisma.products.create({
-        data: createProductDto,
+      const { error, value } = productValidation.validate(createProductDto);
+      if (error) {
+        return {
+          message: error.details[0].message,
+        };
+      }
+
+      const product = await this.prisma.products.create({
+        data: {
+          ...value,
+        },
       });
-      return result;
+
+      return {
+        data: product,
+        message: 'Successfully created product',
+      };
     } catch (error) {
       throw new Error(`Failed to create product: ${error.message}`);
     }
@@ -27,6 +42,17 @@ export class ProductsService {
           attachments: true,
           is_active: true,
           minimum_order: true,
+          size: true,
+          store: {
+            select: {
+              name: true,
+              slogan: true,
+              description: true,
+              domain: true,
+              logo_attachment: true,
+              banner_attachment: true,
+            },
+          },
         },
       });
       return {
@@ -49,8 +75,20 @@ export class ProductsService {
           attachments: true,
           is_active: true,
           minimum_order: true,
+          size: true,
+          store: {
+            select: {
+              name: true,
+              slogan: true,
+              description: true,
+              domain: true,
+              logo_attachment: true,
+              banner_attachment: true,
+            },
+          },
         },
       });
+
       return {
         data: products,
       };
@@ -71,6 +109,17 @@ export class ProductsService {
           attachments: true,
           is_active: true,
           minimum_order: true,
+          size: true,
+          store: {
+            select: {
+              name: true,
+              slogan: true,
+              description: true,
+              domain: true,
+              logo_attachment: true,
+              banner_attachment: true,
+            },
+          },
         },
       });
 
@@ -92,9 +141,24 @@ export class ProductsService {
           attachments: true,
           is_active: true,
           minimum_order: true,
+          size: true,
+          store: {
+            select: {
+              name: true,
+              slogan: true,
+              description: true,
+              domain: true,
+              logo_attachment: true,
+              banner_attachment: true,
+            },
+          },
         },
       });
-      return product;
+
+      if (!product) return { message: 'Product not found' };
+      return {
+        data: product,
+      };
     } catch (error) {
       throw new Error(`Failed to find product: ${error.message}`);
     }
@@ -102,6 +166,13 @@ export class ProductsService {
 
   async update(id: number, updateProductDto: UpdateProductDto) {
     try {
+      const { error, value } =
+        productUpdateValidation.validate(updateProductDto);
+      if (error) {
+        return {
+          message: error.details[0].message,
+        };
+      }
       const productId = Number(id);
 
       const product = await this.prisma.products.findUnique({
@@ -114,10 +185,13 @@ export class ProductsService {
 
       const updateProduct = await this.prisma.products.update({
         where: { id: productId },
-        data: updateProductDto,
+        data: value,
       });
 
-      return updateProduct;
+      return {
+        data: updateProduct,
+        message: 'Successfully update product',
+      };
     } catch (error) {
       throw new Error(`Failed to update product: ${error.message}`);
     }
@@ -126,11 +200,21 @@ export class ProductsService {
   async remove(id: number) {
     try {
       const productId = Number(id);
-      const product = await this.prisma.products.delete({
+      const product = await this.prisma.products.findUnique({
         where: { id: productId },
       });
 
-      return product;
+      if (!product) {
+        return { message: 'Product not found' };
+      }
+      const deleteProduct = await this.prisma.products.delete({
+        where: { id: productId },
+      });
+
+      return {
+        data: deleteProduct,
+        message: 'Succesfully delete a product(s)',
+      };
     } catch (error) {
       throw new Error(`Failed to delete product: ${error.message}`);
     }
