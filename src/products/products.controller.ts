@@ -6,24 +6,39 @@ import {
   Patch,
   Param,
   Delete,
+  UploadedFile,
+  UseInterceptors,
 } from '@nestjs/common';
 import { ProductsService } from './products.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
-import { UserSelector } from 'src/users/decorators/user.decorator';
-import { User } from 'src/users/interfaces/user';
+import { FileInterceptor } from '@nestjs/platform-express/multer';
+import { diskStorage } from 'multer';
 
 @Controller('products')
 export class ProductsController {
   constructor(private readonly productsService: ProductsService) {}
 
   @Post()
+  @UseInterceptors(
+    FileInterceptor('attachments', {
+      storage: diskStorage({
+        destination: './uploads',
+        filename: (req, file, cb) => {
+          const randomName = Array(32)
+            .fill(null)
+            .map(() => Math.round(Math.random() * 16).toString(16))
+            .join('');
+          return cb(null, `${randomName}${file.originalname}`);
+        },
+      }),
+    }),
+  )
   create(
+    @UploadedFile() attachments,
     @Body() createProductDto: CreateProductDto,
-    // @UserSelector() user: User,
   ) {
-    // const currentUser = user.id;
-    // createProductDto.store_id = currentUser;
+    createProductDto.attachments = attachments.filename;
     return this.productsService.createProduct(createProductDto);
   }
 
