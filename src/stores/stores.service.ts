@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { CreateStoreDto } from './dto/create-store.dto';
 import { UpdateStoreDto } from './dto/update-store.dto';
 import { PrismaService } from 'src/prisma.service';
-import { storeValidation } from 'src/util/validation/stores/store';
+import { storeValidation } from 'src/util/validation/stores/storeCreate';
 
 @Injectable()
 export class StoresService {

@@ -21,12 +21,30 @@ export class DecorationService {
     }
   }
 
-  findAll() {
-    return `This action returns all decoration`;
+  async findAll() {
+    try {
+      const decoration = await this.prisma.decoration.findMany();
+      return {
+        message: 'successfully get all decoration',
+        data: decoration,
+      };
+    } catch (error) {
+      throw new Error(`Failed to fetch decoration: ${error.message}`);
+    }
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} decoration`;
+  async findOne(id: number) {
+    try {
+      const decoration = await this.prisma.decoration.findMany({
+        where: { id: id },
+      });
+      return {
+        message: 'Succesfully get all decoration',
+        data: decoration,
+      };
+    } catch (error) {
+      throw new Error(`Failed to fetch decoration: ${error.message}`);
+    }
   }
 
   async update(id: number, updateDecorationDto: UpdateDecorationDto) {
@@ -49,10 +67,23 @@ export class DecorationService {
         data: decoration,
         message: 'Succesfully update decoration',
       };
-    } catch (error) {}
+    } catch (error) {
+      throw new Error(`Failed to update decoration: ${error.message}`);
+    }
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} decoration`;
+  async remove(id: number) {
+    try {
+      const decoration = await this.prisma.decoration.delete({
+        where: { id: id },
+      });
+
+      return {
+        data: decoration,
+        message: 'Succesfully delete decoration',
+      };
+    } catch (error) {
+      throw new Error(`Failed to delete decoration: ${error.message}`);
+    }
   }
 }
