@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Body, Injectable } from '@nestjs/common';
 import { CreateVariantOptionValueDto } from './dto/create-variant_option_value.dto';
 import { UpdateVariantOptionValueDto } from './dto/update-variant_option_value.dto';
 import { PrismaService } from 'src/prisma.service';
@@ -6,11 +6,25 @@ import { PrismaService } from 'src/prisma.service';
 @Injectable()
 export class VariantOptionValuesService {
   constructor(private readonly prisma: PrismaService) {}
-  async create(createVariantOptionValueDto: CreateVariantOptionValueDto) {
+  async create(
+    @Body() createVariantOptionValueDto: CreateVariantOptionValueDto,
+  ) {
     try {
+      const { variant_option_id } = createVariantOptionValueDto;
+
+      const variantOption = await this.prisma.variantOptions.findUnique({
+        where: { id: variant_option_id },
+      });
+
+      if (!variantOption) {
+        return {
+          message: 'Variant Option not found',
+        };
+      }
       const variantOptionValue = await this.prisma.variantOptionValues.create({
         data: createVariantOptionValueDto,
       });
+
       return {
         data: variantOptionValue,
         message: 'Successfully created variant Option Value',

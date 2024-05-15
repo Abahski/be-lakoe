@@ -33,6 +33,8 @@ import { CartItemsModule } from './cart-items/cart-items.module';
 import { CartsController } from './carts/carts.controller';
 import { CartItemsController } from './cart-items/cart-items.controller';
 import { RolesController } from './roles/roles.controller';
+import { InvoicesModule } from './invoices/invoices.module';
+import { InvoicesController } from './invoices/invoices.controller';
 
 @Module({
   imports: [
@@ -55,6 +57,7 @@ import { RolesController } from './roles/roles.controller';
     }),
     CartsModule,
     CartItemsModule,
+    InvoicesModule,
   ],
   controllers: [AppController],
   providers: [AppService, JwtService],
@@ -72,5 +75,6 @@ export class AppModule {
     consumer.apply(JwtMiddleware).forRoutes(CartsController);
     consumer.apply(JwtMiddleware).forRoutes(CartItemsController);
     consumer.apply(JwtMiddleware).forRoutes(RolesController);
+    consumer.apply(JwtMiddleware).forRoutes(InvoicesController);
   }
 }
