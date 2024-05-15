@@ -22,7 +22,10 @@ export class CourierService {
         data: createCourierDto,
       });
 
-      return courier;
+      return {
+        message: 'Berhasil, yeayy!!!',
+        data: courier,
+      };
     } catch (error) {
       console.error('error create courier : ', error);
     }

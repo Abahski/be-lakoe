@@ -9,21 +9,22 @@ export class PaymentsService {
   async create(@Body() createPaymentDto: CreatePaymentDto) {
     try {
       const { invoice_id } = createPaymentDto;
-      const { id } = await this.prisma.invoice.findUnique({
+      const invoiceExists = await this.prisma.invoice.findUnique({
         where: {
           id: invoice_id,
         },
       });
 
-      if (!id) {
+      if (!invoiceExists) {
         throw new Error(`Invoice with ID ${invoice_id} not found`);
       }
-      const payment = await this.prisma.payment.create({
+
+      return await this.prisma.payment.create({
         data: createPaymentDto,
       });
-
-      return payment;
-    } catch (error) {}
+    } catch (error) {
+      throw new Error(`Failed to create payment: ${error.message}`);
+    }
   }
 
   findAll() {

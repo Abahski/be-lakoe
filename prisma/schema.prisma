@@ -29,7 +29,7 @@ model User {
   role       Roles?      @relation(fields: [role_id], references: [id])
   carts      Carts[]
   invoice    Invoice[]
-  payment    Payment?
+  payment    Payment[]
   created_at DateTime    @default(now())
   updated_at DateTime    @updatedAt
   CartItems  CartItems[]
@@ -72,7 +72,7 @@ model Categories {
 
 model Stores {
   id                  Int                   @id @default(autoincrement())
-  name                String  @unique
+  name                String                @unique
   slogan              String
   description         String
   domain              String?
@@ -225,7 +225,7 @@ model Payment {
   invoice    Invoice @relation(fields: [invoice_id], references: [id])
   invoice_id Int     @unique
   user       User    @relation(fields: [user_id], references: [id])
-  user_id    Int     @unique
+  user_id    Int
 }
 
 model Invoice {
