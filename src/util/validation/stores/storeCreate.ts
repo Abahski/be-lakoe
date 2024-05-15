@@ -1,4 +1,4 @@
-import Joi from 'joi';
+import * as Joi from 'joi';
 
 export const storeValidation = Joi.object({
   name: Joi.string().required(),

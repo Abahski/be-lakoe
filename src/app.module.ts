@@ -35,6 +35,8 @@ import { CartItemsController } from './cart-items/cart-items.controller';
 import { RolesController } from './roles/roles.controller';
 import { InvoicesModule } from './invoices/invoices.module';
 import { InvoicesController } from './invoices/invoices.controller';
+import { CourierModule } from './courier/courier.module';
+import { PaymentsModule } from './payments/payments.module';
 
 @Module({
   imports: [
@@ -63,6 +65,8 @@ import { InvoicesController } from './invoices/invoices.controller';
     CartsModule,
     CartItemsModule,
     InvoicesModule,
+    CourierModule,
+    PaymentsModule,
   ],
   controllers: [AppController],
   providers: [AppService, JwtService],
