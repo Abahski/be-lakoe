@@ -13,7 +13,6 @@ export class ProductsService {
     try {
       let imageData = createProductDto.attachments;
       const attachments = createProductDto.attachments;
-      console.log(attachments, 'ini test');
       if (attachments && attachments) {
         imageData = attachments;
       }
@@ -25,17 +24,17 @@ export class ProductsService {
         };
       }
 
-      // const { store_id } = value;
+      const { store_id } = value;
 
-      // const existingStore = await this.prisma.stores.findUnique({
-      //   where: { id: store_id },
-      // });
+      const existingStore = await this.prisma.stores.findUnique({
+        where: { id: store_id },
+      });
 
-      // if (!existingStore) {
-      //   return {
-      //     message: 'Invalid store provided.',
-      //   };
-      // }
+      if (!existingStore) {
+        return {
+          message: 'Invalid store provided.',
+        };
+      }
 
       const product = await this.prisma.products.create({
         data: {
