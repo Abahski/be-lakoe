@@ -12,6 +12,10 @@ import {
 import { ProductsService } from './products.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { diskStorage } from 'multer';
+import { UserSelector } from 'src/users/decorators/user.decorator';
+import { User } from '@prisma/client';
 
 @Controller('products')
 export class ProductsController {
@@ -34,8 +38,10 @@ export class ProductsController {
   )
   create(
     @UploadedFile() attachments,
+    @UserSelector() user: User,
     @Body() createProductDto: CreateProductDto,
   ) {
+    console.log(user);
     createProductDto.attachments = attachments.filename;
     return this.productsService.createProduct(createProductDto);
   }
