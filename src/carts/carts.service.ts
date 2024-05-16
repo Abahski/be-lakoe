@@ -11,7 +11,6 @@ export class CartsService {
       const cart = await this.prisma.carts.create({
         data: createCartDto,
       });
-
       return {
         data: cart,
         message: 'Successfully created cart',

@@ -18,9 +18,12 @@ export class CartsController {
   constructor(private readonly cartsService: CartsService) {}
 
   @Post()
-  create(@Body() @UserSelector() user: User, createCartDto: CreateCartDto) {
+  async create(
+    @Body()
+    createCartDto: CreateCartDto,
+    @UserSelector() user: User,
+  ) {
     createCartDto.user_id = user.id;
-    console.log(user);
     return this.cartsService.create(createCartDto);
   }
 
