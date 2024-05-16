@@ -10,13 +10,20 @@ import {
 import { CartItemsService } from './cart-items.service';
 import { CreateCartItemDto } from './dto/create-cart-item.dto';
 import { UpdateCartItemDto } from './dto/update-cart-item.dto';
+import { UserSelector } from 'src/users/decorators/user.decorator';
+import { User } from '@prisma/client';
 
 @Controller('cart-items')
 export class CartItemsController {
   constructor(private readonly cartItemsService: CartItemsService) {}
 
-  @Post()
-  create(@Body() createCartItemDto: CreateCartItemDto) {
+  @Post('create')
+  create(
+    @Body()
+    createCartItemDto: CreateCartItemDto,
+    @UserSelector() user: User,
+  ) {
+    createCartItemDto.user_id = user.id;
     return this.cartItemsService.create(createCartItemDto);
   }
 
@@ -30,7 +37,7 @@ export class CartItemsController {
     return this.cartItemsService.findOne(+id);
   }
 
-  @Patch(':id')
+  @Patch('update/:id')
   update(
     @Param('id') id: string,
     @Body() updateCartItemDto: UpdateCartItemDto,
@@ -38,7 +45,7 @@ export class CartItemsController {
     return this.cartItemsService.update(+id, updateCartItemDto);
   }
 
-  @Delete(':id')
+  @Delete('delete/:id')
   remove(@Param('id') id: string) {
     return this.cartItemsService.remove(+id);
   }

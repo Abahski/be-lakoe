@@ -15,7 +15,7 @@ import { UpdateBankAccountDto } from './dto/update-bank_account.dto';
 export class BankAccountController {
   constructor(private readonly bankAccountService: BankAccountService) {}
 
-  @Post()
+  @Post('/create')
   create(@Body() createBankAccountDto: CreateBankAccountDto) {
     return this.bankAccountService.create(createBankAccountDto);
   }
@@ -30,7 +30,7 @@ export class BankAccountController {
     return this.bankAccountService.findOne(+id);
   }
 
-  @Patch(':id')
+  @Patch('update/:id')
   update(
     @Param('id') id: string,
     @Body() updateBankAccountDto: UpdateBankAccountDto,
@@ -38,7 +38,7 @@ export class BankAccountController {
     return this.bankAccountService.update(+id, updateBankAccountDto);
   }
 
-  @Delete(':id')
+  @Delete('delete/:id')
   remove(@Param('id') id: string) {
     return this.bankAccountService.remove(+id);
   }

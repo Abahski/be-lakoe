@@ -15,7 +15,7 @@ import { UpdateDecorationDto } from './dto/update-decoration.dto';
 export class DecorationController {
   constructor(private readonly decorationService: DecorationService) {}
 
-  @Post()
+  @Post('create')
   create(@Body() createDecorationDto: CreateDecorationDto) {
     return this.decorationService.create(createDecorationDto);
   }
@@ -30,7 +30,7 @@ export class DecorationController {
     return this.decorationService.findOne(+id);
   }
 
-  @Patch(':id')
+  @Patch('update/:id')
   update(
     @Param('id') id: string,
     @Body() updateDecorationDto: UpdateDecorationDto,
@@ -38,7 +38,7 @@ export class DecorationController {
     return this.decorationService.update(+id, updateDecorationDto);
   }
 
-  @Delete(':id')
+  @Delete('delete/:id')
   remove(@Param('id') id: string) {
     return this.decorationService.remove(+id);
   }

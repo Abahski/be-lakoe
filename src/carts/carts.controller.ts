@@ -17,10 +17,13 @@ import { User } from '@prisma/client';
 export class CartsController {
   constructor(private readonly cartsService: CartsService) {}
 
-  @Post()
-  create(@Body() @UserSelector() user: User, createCartDto: CreateCartDto) {
+  @Post('create')
+  async create(
+    @Body()
+    createCartDto: CreateCartDto,
+    @UserSelector() user: User,
+  ) {
     createCartDto.user_id = user.id;
-    console.log(user);
     return this.cartsService.create(createCartDto);
   }
 
@@ -34,12 +37,12 @@ export class CartsController {
     return this.cartsService.findOne(+id);
   }
 
-  @Patch(':id')
+  @Patch('update/:id')
   update(@Param('id') id: string, @Body() updateCartDto: UpdateCartDto) {
     return this.cartsService.update(+id, updateCartDto);
   }
 
-  @Delete(':id')
+  @Delete('delete/:id')
   remove(@Param('id') id: string) {
     return this.cartsService.remove(+id);
   }

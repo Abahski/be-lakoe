@@ -9,16 +9,15 @@ export class VariantOptionsService {
   async create(@Body() createVariantOptionDto: CreateVariantOptionDto) {
     try {
       const { variant_id } = createVariantOptionDto;
-
-      const variantId = await this.prisma.variantOptions.findUnique({
+      const variantId = await this.prisma.variants.findUnique({
         where: { id: variant_id },
       });
-
       if (!variantId) {
         return {
-          message: 'Variant  not found',
+          message: 'Variant not found',
         };
       }
+
       const variantOptions = await this.prisma.variantOptions.create({
         data: createVariantOptionDto,
       });

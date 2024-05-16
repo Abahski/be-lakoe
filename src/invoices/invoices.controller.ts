@@ -15,11 +15,10 @@ import { UpdateInvoiceDto } from './dto/update-invoice.dto';
 export class InvoicesController {
   constructor(private readonly invoicesService: InvoicesService) {}
 
-  @Post()
+  @Post('create')
   async create(@Body() createInvoiceDto: CreateInvoiceDto) {
     try {
       const invoice = await this.invoicesService.create(createInvoiceDto);
-      console.log(createInvoiceDto);
       return {
         data: invoice,
         message: 'Successfully created invoice',
@@ -59,7 +58,7 @@ export class InvoicesController {
     }
   }
 
-  @Delete(':id')
+  @Delete('delete/:id')
   async remove(@Param('id') id: string) {
     try {
       const result = await this.invoicesService.remove(+id);
@@ -73,7 +72,7 @@ export class InvoicesController {
     }
   }
 
-  @Patch(':id')
+  @Patch('update/:id')
   async update(
     @Param('id') id: string,
     @Body() updateInvoiceDto: UpdateInvoiceDto,

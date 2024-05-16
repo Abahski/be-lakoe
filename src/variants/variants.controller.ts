@@ -15,7 +15,7 @@ import { UpdateVariantDto } from './dto/update-variant.dto';
 export class VariantsController {
   constructor(private readonly variantsService: VariantsService) {}
 
-  @Post()
+  @Post('create')
   create(@Body() createVariantDto: CreateVariantDto) {
     return this.variantsService.createVariant(createVariantDto);
   }
@@ -40,12 +40,12 @@ export class VariantsController {
     return this.variantsService.findOne(+id);
   }
 
-  @Patch(':id')
+  @Patch('update/:id')
   update(@Param('id') id: string, @Body() updateVariantDto: UpdateVariantDto) {
     return this.variantsService.update(+id, updateVariantDto);
   }
 
-  @Delete(':id')
+  @Delete('delete:id')
   remove(@Param('id') id: string) {
     return this.variantsService.remove(+id);
   }

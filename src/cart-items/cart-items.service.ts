@@ -21,6 +21,16 @@ export class CartItemsService {
         };
       }
 
+      const cart = await this.prisma.carts.findUnique({
+        where: { id: createCartItemDto.cart_id },
+      });
+
+      if (!cart) {
+        return {
+          message: 'Cart not found',
+        };
+      }
+
       const cartItem = await this.prisma.cartItems.create({
         data: createCartItemDto,
       });
