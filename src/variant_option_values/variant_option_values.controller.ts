@@ -17,7 +17,7 @@ export class VariantOptionValuesController {
     private readonly variantOptionValuesService: VariantOptionValuesService,
   ) {}
 
-  @Post()
+  @Post('create')
   create(@Body() createVariantOptionValueDto: CreateVariantOptionValueDto) {
     return this.variantOptionValuesService.create(createVariantOptionValueDto);
   }
@@ -32,7 +32,7 @@ export class VariantOptionValuesController {
     return this.variantOptionValuesService.findOne(+id);
   }
 
-  @Patch(':id')
+  @Patch('update/:id')
   update(
     @Param('id') id: string,
     @Body() updateVariantOptionValueDto: UpdateVariantOptionValueDto,
@@ -43,7 +43,7 @@ export class VariantOptionValuesController {
     );
   }
 
-  @Delete(':id')
+  @Delete('delete/:id')
   remove(@Param('id') id: string) {
     return this.variantOptionValuesService.remove(+id);
   }

@@ -15,7 +15,7 @@ import { UpdateVariantOptionDto } from './dto/update-variant_option.dto';
 export class VariantOptionsController {
   constructor(private readonly variantOptionsService: VariantOptionsService) {}
 
-  @Post()
+  @Post('create')
   create(@Body() createVariantOptionDto: CreateVariantOptionDto) {
     return this.variantOptionsService.create(createVariantOptionDto);
   }
@@ -30,7 +30,7 @@ export class VariantOptionsController {
     return this.variantOptionsService.findOne(+id);
   }
 
-  @Patch(':id')
+  @Patch('update/:id')
   update(
     @Param('id') id: string,
     @Body() updateVariantOptionDto: UpdateVariantOptionDto,
@@ -38,7 +38,7 @@ export class VariantOptionsController {
     return this.variantOptionsService.update(+id, updateVariantOptionDto);
   }
 
-  @Delete(':id')
+  @Delete('delete/:id')
   remove(@Param('id') id: string) {
     return this.variantOptionsService.remove(+id);
   }

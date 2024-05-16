@@ -17,7 +17,7 @@ export class MessageTemplatesController {
     private readonly messageTemplatesService: MessageTemplatesService,
   ) {}
 
-  @Post()
+  @Post('create')
   create(@Body() createMessageTemplateDto: CreateMessageTemplateDto) {
     return this.messageTemplatesService.create(createMessageTemplateDto);
   }
@@ -32,7 +32,7 @@ export class MessageTemplatesController {
     return this.messageTemplatesService.findOne(+id);
   }
 
-  @Patch(':id')
+  @Patch('update/:id')
   update(
     @Param('id') id: string,
     @Body() updateMessageTemplateDto: UpdateMessageTemplateDto,
@@ -40,7 +40,7 @@ export class MessageTemplatesController {
     return this.messageTemplatesService.update(+id, updateMessageTemplateDto);
   }
 
-  @Delete(':id')
+  @Delete('delete/:id')
   remove(@Param('id') id: string) {
     return this.messageTemplatesService.remove(+id);
   }

@@ -17,7 +17,7 @@ export class InvoiceHistoriesController {
     private readonly invoiceHistoriesService: InvoiceHistoriesService,
   ) {}
 
-  @Post()
+  @Post('create')
   create(@Body() createInvoiceHistoryDto: CreateInvoiceHistoryDto) {
     return this.invoiceHistoriesService.create(createInvoiceHistoryDto);
   }
@@ -32,7 +32,7 @@ export class InvoiceHistoriesController {
     return this.invoiceHistoriesService.findOne(+id);
   }
 
-  @Patch(':id')
+  @Patch('update/:id')
   update(
     @Param('id') id: string,
     @Body() updateInvoiceHistoryDto: UpdateInvoiceHistoryDto,
@@ -40,7 +40,7 @@ export class InvoiceHistoriesController {
     return this.invoiceHistoriesService.update(+id, updateInvoiceHistoryDto);
   }
 
-  @Delete(':id')
+  @Delete('delete/:id')
   remove(@Param('id') id: string) {
     return this.invoiceHistoriesService.remove(+id);
   }

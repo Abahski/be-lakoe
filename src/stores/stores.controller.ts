@@ -15,7 +15,7 @@ import { UpdateStoreDto } from './dto/update-store.dto';
 export class StoresController {
   constructor(private readonly storesService: StoresService) {}
 
-  @Post()
+  @Post('create')
   create(@Body() createStoreDto: CreateStoreDto) {
     return this.storesService.create(createStoreDto);
   }
@@ -30,12 +30,12 @@ export class StoresController {
     return this.storesService.findOne(+id);
   }
 
-  @Patch(':id')
+  @Patch('update/:id')
   update(@Param('id') id: string, @Body() updateStoreDto: UpdateStoreDto) {
     return this.storesService.update(+id, updateStoreDto);
   }
 
-  @Delete(':id')
+  @Delete('delete/:id')
   remove(@Param('id') id: string) {
     return this.storesService.remove(+id);
   }

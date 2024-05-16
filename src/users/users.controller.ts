@@ -15,7 +15,7 @@ import { UpdateUserDto } from './dto/update-user.dto';
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
-  @Post()
+  @Post('create')
   async create(@Body() createUserDto: CreateUserDto) {
     try {
       const result = await this.usersService.createUser(createUserDto);
@@ -59,7 +59,7 @@ export class UsersController {
     }
   }
 
-  @Patch(':id')
+  @Patch('update/:id')
   async update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
     try {
       const userId = Number(id);
@@ -75,7 +75,7 @@ export class UsersController {
     }
   }
 
-  @Delete(':id')
+  @Delete('delete/:id')
   async delete(@Param('id') id: string) {
     try {
       const userId = Number(id);

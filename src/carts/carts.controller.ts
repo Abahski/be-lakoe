@@ -17,7 +17,7 @@ import { User } from '@prisma/client';
 export class CartsController {
   constructor(private readonly cartsService: CartsService) {}
 
-  @Post()
+  @Post('create')
   async create(
     @Body()
     createCartDto: CreateCartDto,
@@ -37,12 +37,12 @@ export class CartsController {
     return this.cartsService.findOne(+id);
   }
 
-  @Patch(':id')
+  @Patch('update/:id')
   update(@Param('id') id: string, @Body() updateCartDto: UpdateCartDto) {
     return this.cartsService.update(+id, updateCartDto);
   }
 
-  @Delete(':id')
+  @Delete('delete/:id')
   remove(@Param('id') id: string) {
     return this.cartsService.remove(+id);
   }

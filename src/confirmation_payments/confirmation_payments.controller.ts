@@ -17,7 +17,7 @@ export class ConfirmationPaymentsController {
     private readonly confirmationPaymentsService: ConfirmationPaymentsService,
   ) {}
 
-  @Post()
+  @Post('create')
   create(@Body() createConfirmationPaymentDto: CreateConfirmationPaymentDto) {
     return this.confirmationPaymentsService.create(
       createConfirmationPaymentDto,
@@ -34,7 +34,7 @@ export class ConfirmationPaymentsController {
     return this.confirmationPaymentsService.findOne(+id);
   }
 
-  @Patch(':id')
+  @Patch('update/:id')
   update(
     @Param('id') id: string,
     @Body() updateConfirmationPaymentDto: UpdateConfirmationPaymentDto,
@@ -45,7 +45,7 @@ export class ConfirmationPaymentsController {
     );
   }
 
-  @Delete(':id')
+  @Delete('delete/:id')
   remove(@Param('id') id: string) {
     return this.confirmationPaymentsService.remove(+id);
   }

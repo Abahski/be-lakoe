@@ -21,7 +21,7 @@ import { User } from '@prisma/client';
 export class ProductsController {
   constructor(private readonly productsService: ProductsService) {}
 
-  @Post()
+  @Post('create')
   @UseInterceptors(
     FileInterceptor('attachments', {
       storage: diskStorage({
@@ -66,12 +66,12 @@ export class ProductsController {
     return this.productsService.findOne(+id);
   }
 
-  @Patch(':id')
+  @Patch('update/:id')
   update(@Param('id') id: string, @Body() updateProductDto: UpdateProductDto) {
     return this.productsService.update(+id, updateProductDto);
   }
 
-  @Delete(':id')
+  @Delete('update/:id')
   remove(@Param('id') id: string) {
     return this.productsService.remove(+id);
   }

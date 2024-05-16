@@ -8,7 +8,7 @@ export class StoreOnDecorationController {
     private readonly storeOnDecorationService: StoreOnDecorationService,
   ) {}
 
-  @Post()
+  @Post('create')
   create(@Body() createStoreOnDecorationDto: CreateStoreOnDecorationDto) {
     return this.storeOnDecorationService.create(createStoreOnDecorationDto);
   }

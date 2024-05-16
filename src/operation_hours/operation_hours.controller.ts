@@ -15,7 +15,7 @@ import { UpdateOperationHourDto } from './dto/update-operation_hour.dto';
 export class OperationHoursController {
   constructor(private readonly operationHoursService: OperationHoursService) {}
 
-  @Post()
+  @Post('create')
   create(@Body() createOperationHourDto: CreateOperationHourDto) {
     return this.operationHoursService.create(createOperationHourDto);
   }
@@ -30,7 +30,7 @@ export class OperationHoursController {
     return this.operationHoursService.findOne(+id);
   }
 
-  @Patch(':id')
+  @Patch('update/:id')
   update(
     @Param('id') id: string,
     @Body() updateOperationHourDto: UpdateOperationHourDto,
@@ -38,7 +38,7 @@ export class OperationHoursController {
     return this.operationHoursService.update(+id, updateOperationHourDto);
   }
 
-  @Delete(':id')
+  @Delete('delete/:id')
   remove(@Param('id') id: string) {
     return this.operationHoursService.remove(+id);
   }
