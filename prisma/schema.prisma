@@ -158,9 +158,10 @@ model StoresOnDecorations {
 
 model OperationHours {
   id         Int      @id @default(autoincrement())
-  day        String[]
+  day        String
   open_at    String
   close_at   String
+  is_off     Boolean
   store      Stores   @relation(fields: [store_id], references: [id])
   store_id   Int
   created_at DateTime @default(now())

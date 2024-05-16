@@ -74,10 +74,6 @@ export class InvoicesService {
     }
   }
 
-  // update(id: number, updateInvoiceDto: UpdateInvoiceDto) {
-  //   return `This action updates a #${id} invoice`;
-  // }
-
   async remove(id: number) {
     try {
       await this.prisma.invoice.delete({
