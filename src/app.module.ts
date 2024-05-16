@@ -26,7 +26,6 @@ import { RolesModule } from './roles/roles.module';
 import { ConfirmationPaymentsModule } from './confirmation_payments/confirmation_payments.module';
 import { InvoiceHistoriesModule } from './invoice_histories/invoice_histories.module';
 import { DecorationModule } from './decoration/decoration.module';
-import { StoreOnDecorationModule } from './store_on_decoration/store_on_decoration.module';
 import { LocationsController } from './locations/locations.controller';
 import { CartsModule } from './carts/carts.module';
 import { CartItemsModule } from './cart-items/cart-items.module';
@@ -37,6 +36,8 @@ import { InvoicesModule } from './invoices/invoices.module';
 import { InvoicesController } from './invoices/invoices.controller';
 import { CourierModule } from './courier/courier.module';
 import { PaymentsModule } from './payments/payments.module';
+import { OperationHoursModule } from './operation_hours/operation_hours.module';
+import { StoreOnDecorationModule } from './store_on_decoration/store_on_decoration.module';
 
 @Module({
   imports: [
@@ -67,6 +68,7 @@ import { PaymentsModule } from './payments/payments.module';
     InvoicesModule,
     CourierModule,
     PaymentsModule,
+    OperationHoursModule,
   ],
   controllers: [AppController],
   providers: [AppService, JwtService],

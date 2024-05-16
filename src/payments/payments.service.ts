@@ -27,12 +27,31 @@ export class PaymentsService {
     }
   }
 
-  findAll() {
-    return `This action returns all payments`;
+  async findAll() {
+    try {
+      const payment = await this.prisma.payment.findMany();
+      return {
+        message: 'Successs',
+        data: payment,
+      };
+    } catch (error) {
+      throw new Error(`Failed to fetch payment: ${error.message}`);
+    }
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} payment`;
+  async findOne(id: number) {
+    try {
+      const payment = await this.prisma.payment.findUnique({
+        where: {
+          id: id,
+        },
+      });
+
+      return {
+        message: 'Success',
+        data: payment,
+      };
+    } catch (error) {}
   }
 
   async update(id: number, updatePaymentDto: UpdatePaymentDto) {
@@ -50,7 +69,20 @@ export class PaymentsService {
     }
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} payment`;
+  async remove(id: number) {
+    try {
+      const payment = await this.prisma.payment.delete({
+        where: {
+          id: id,
+        },
+      });
+
+      return {
+        message: 'Success',
+        data: payment,
+      };
+    } catch (error) {
+      throw new Error(`Failed to delete payment: ${error.message}`);
+    }
   }
 }

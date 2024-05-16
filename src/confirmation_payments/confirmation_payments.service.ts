@@ -1,30 +1,113 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { Injectable } from '@nestjs/common';
+import { Body, Injectable } from '@nestjs/common';
 import { CreateConfirmationPaymentDto } from './dto/create-confirmation_payment.dto';
 import { UpdateConfirmationPaymentDto } from './dto/update-confirmation_payment.dto';
+import { PrismaService } from 'src/prisma.service';
 
 @Injectable()
 export class ConfirmationPaymentsService {
-  create(createConfirmationPaymentDto: CreateConfirmationPaymentDto) {
-    return 'This action adds a new confirmationPayment';
+  constructor(private readonly prisma: PrismaService) {}
+  async create(
+    @Body() createConfirmationPaymentDto: CreateConfirmationPaymentDto,
+  ) {
+    try {
+      const { invoice_id } = createConfirmationPaymentDto;
+      const invoiceExists = await this.prisma.invoice.findUnique({
+        where: {
+          id: invoice_id,
+        },
+      });
+
+      if (!invoiceExists) {
+        throw new Error(`Invoice with ID ${invoice_id} not found`);
+      }
+
+      return await this.prisma.confirmation_payment.create({
+        data: createConfirmationPaymentDto,
+      });
+    } catch (error) {
+      throw new Error(
+        `Failed to create confirmation payment: ${error.message}`,
+      );
+    }
   }
 
-  findAll() {
-    return `This action returns all confirmationPayments`;
+  async findAll() {
+    try {
+      const confirmation = await this.prisma.confirmation_payment.findMany();
+
+      return {
+        message: 'successfully get all confirmation payments',
+        data: confirmation,
+      };
+    } catch (error) {
+      throw new Error(
+        `Failed to fetch confirmation payments: ${error.message}`,
+      );
+    }
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} confirmationPayment`;
+  async findOne(id: number) {
+    try {
+      const onePayment = await this.prisma.confirmation_payment.findUnique({
+        where: { id },
+      });
+
+      if (!onePayment) {
+        throw new Error(`Confirmation payment with ID ${id} not found`);
+      }
+
+      return {
+        message: 'Success!!!',
+        data: onePayment,
+      };
+    } catch (error) {}
   }
 
-  update(
+  async update(
     id: number,
     updateConfirmationPaymentDto: UpdateConfirmationPaymentDto,
   ) {
-    return `This action updates a #${id} confirmationPayment`;
+    try {
+      const existingConfirmation =
+        await this.prisma.confirmation_payment.findUnique({
+          where: {
+            id: id,
+          },
+        });
+
+      if (!existingConfirmation) {
+        throw new Error(`Confirmation payment with ID ${id} not found`);
+      }
+
+      const updatedConfirmation = await this.prisma.confirmation_payment.update(
+        {
+          where: { id: id },
+          data: updateConfirmationPaymentDto,
+        },
+      );
+
+      return {
+        message: 'Success',
+        data: updatedConfirmation,
+      };
+    } catch (error) {
+      throw new Error(
+        `Failed to update confirmation payment: ${error.message}`,
+      );
+    }
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} confirmationPayment`;
+  async remove(id: number) {
+    try {
+      const deletePayment = await this.prisma.confirmation_payment.delete({
+        where: { id: id },
+      });
+
+      return {
+        data: deletePayment,
+        message: 'Success!',
+      };
+    } catch (error) {}
   }
 }
