@@ -47,28 +47,24 @@ export class OperationHoursService {
     }
   }
 
-  async findOne(
-    @Body() id: number,
-    createOperationHourDto: CreateOperationHourDto,
-  ) {
+  async findOne(id: number) {
     try {
-      const { store_id } = createOperationHourDto;
-      const { id } = await this.prisma.stores.findUnique({
-        where: {
-          id: store_id,
+      const operation_hours = await this.prisma.operationHours.findUnique({
+        where: { id },
+        select: {
+          id: true,
+          day: true,
+          open_at: true,
+          close_at: true,
+          store_id: true,
         },
       });
 
-      const operation = await this.prisma.operationHours.findMany({
-        where: {
-          store_id: id,
-        },
-      });
-
-      return {
-        message: `Failed to fetch stores with id ${id}`,
-        data: operation,
-      };
+      if (!operation_hours) {
+        return {
+          message: 'Operation hours not found',
+        };
+      }
     } catch (error) {
       throw new Error(`Failed to fetch operation stores: ${error.message}`);
     }
