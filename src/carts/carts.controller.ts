@@ -10,13 +10,17 @@ import {
 import { CartsService } from './carts.service';
 import { CreateCartDto } from './dto/create-cart.dto';
 import { UpdateCartDto } from './dto/update-cart.dto';
+import { UserSelector } from 'src/users/decorators/user.decorator';
+import { User } from '@prisma/client';
 
 @Controller('carts')
 export class CartsController {
   constructor(private readonly cartsService: CartsService) {}
 
   @Post()
-  create(@Body() createCartDto: CreateCartDto) {
+  create(@Body() @UserSelector() user: User, createCartDto: CreateCartDto) {
+    createCartDto.user_id = user.id;
+    console.log(user);
     return this.cartsService.create(createCartDto);
   }
 
