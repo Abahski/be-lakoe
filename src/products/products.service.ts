@@ -219,6 +219,7 @@ export class ProductsService {
   async remove(id: number) {
     try {
       const productId = Number(id);
+      console.log(productId);
       const product = await this.prisma.products.findUnique({
         where: { id: productId },
       });

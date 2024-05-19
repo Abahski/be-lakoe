@@ -71,7 +71,7 @@ export class ProductsController {
     return this.productsService.update(+id, updateProductDto);
   }
 
-  @Delete('update/:id')
+  @Delete('delete/:id')
   remove(@Param('id') id: string) {
     return this.productsService.remove(+id);
   }
