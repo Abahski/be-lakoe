@@ -38,6 +38,7 @@ import { CourierModule } from './courier/courier.module';
 import { PaymentsModule } from './payments/payments.module';
 import { OperationHoursModule } from './operation_hours/operation_hours.module';
 import { StoreOnDecorationModule } from './store_on_decoration/store_on_decoration.module';
+import { CategoriesController } from './categories/categories.controller';
 
 @Module({
   imports: [
@@ -90,6 +91,7 @@ export class AppModule {
     consumer.apply(JwtMiddleware).forRoutes(StoreOnDecorationModule);
     consumer.apply(JwtMiddleware).forRoutes(CartsController);
     consumer.apply(JwtMiddleware).forRoutes(CartItemsController);
+    consumer.apply(JwtMiddleware).forRoutes(CategoriesController);
     consumer.apply(JwtMiddleware).forRoutes(RolesController);
     consumer.apply(JwtMiddleware).forRoutes(InvoicesController);
   }

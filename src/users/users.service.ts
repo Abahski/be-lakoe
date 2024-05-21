@@ -33,15 +33,24 @@ export class UsersService {
       if (isExists) {
         throw new Error('Username or email already exist');
       }
+
       const hashBcrypt = await bcrypt.hash(data.password, 2);
       data.password = hashBcrypt;
       if (error) {
         throw new Error(error.details[0].message);
       }
 
-      return this.prisma.user.create({
+      const createUser = await this.prisma.user.create({
         data,
       });
+
+      const createProfile = await this.prisma.profile.create({
+        data: {
+          userId: createUser.id,
+        },
+      });
+
+      return { createUser, createProfile };
     } catch (error) {
       throw new Error(`Failed to create user: ${error.message}`);
     }
