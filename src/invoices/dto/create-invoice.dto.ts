@@ -10,6 +10,7 @@ export class CreateInvoiceDto {
   receiver_phone: string;
   receiver_name: string;
   receiver_address: string;
+  courier_id: number;
   cart_id: number;
   userId: number;
 }

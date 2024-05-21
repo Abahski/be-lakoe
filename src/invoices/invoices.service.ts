@@ -9,7 +9,20 @@ export class InvoicesService {
   create(createInvoiceDto: CreateInvoiceDto) {
     try {
       const invoice = this.prisma.invoice.create({
-        data: createInvoiceDto,
+        data: {
+          prices: createInvoiceDto.prices,
+          service_charge: createInvoiceDto.service_charge,
+          status: createInvoiceDto.status,
+          receiver_longitude: createInvoiceDto.receiver_longitude,
+          receiver_latitude: createInvoiceDto.receiver_latitude,
+          receiver_district: createInvoiceDto.receiver_district,
+          receiver_phone: createInvoiceDto.receiver_phone,
+          receiver_name: createInvoiceDto.receiver_name,
+          receiver_address: createInvoiceDto.receiver_address,
+          courier_id: createInvoiceDto.courier_id,
+          cart_id: createInvoiceDto.cart_id,
+          userId: createInvoiceDto.userId,
+        },
       });
 
       return invoice;
