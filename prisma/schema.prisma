@@ -221,14 +221,19 @@ model CartItems {
   variant_option_value_id Int
 }
 
+enum StatusPayment {
+  UNPAID
+  PAID
+}
+
 model Payment {
-  id         Int     @id @default(autoincrement())
+  id         Int           @id @default(autoincrement())
   bank       String
   amount     Int
-  status     String
-  invoice    Invoice @relation(fields: [invoice_id], references: [id])
-  invoice_id Int     @unique
-  user       User    @relation(fields: [user_id], references: [id])
+  status     StatusPayment
+  invoice    Invoice       @relation(fields: [invoice_id], references: [id])
+  invoice_id Int           @unique
+  user       User          @relation(fields: [user_id], references: [id])
   user_id    Int
 }
 
