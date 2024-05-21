@@ -25,6 +25,7 @@ export class ProductsService {
       }
 
       const { store_id } = value;
+      console.log(store_id, 'ini store id');
 
       const existingStore = await this.prisma.stores.findUnique({
         where: { id: store_id },

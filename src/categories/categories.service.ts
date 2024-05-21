@@ -7,21 +7,21 @@ import { CreateCategoryDto } from './dto/create-category.dto';
 @Injectable()
 export class CategoriesService {
   constructor(private prisma: PrismaService) {}
-  async create(data: CreateCategoryDto) {
-    const { error } = categoriesValidation.validate(CreateCategoryDto);
-
-    if (error) {
-      throw new Error(error.details[0].message);
-    }
-
+  async create(createCategoryDto: CreateCategoryDto) {
     try {
-      const { error } = categoriesValidation.validate(data);
-
+      const { error, value } = categoriesValidation.validate(createCategoryDto);
       if (error) {
         throw new Error(error.details[0].message);
       }
 
-      return this.prisma.categories.create({ data });
+      const category = await this.prisma.categories.create({
+        data: value,
+      });
+
+      return {
+        data: category,
+        message: 'Succesfully created category',
+      };
     } catch (error) {
       throw new Error(`Failed to created categories: ${error.message}`);
     }
@@ -31,10 +31,25 @@ export class CategoriesService {
     try {
       const categories = await this.prisma.categories.findMany({
         select: {
-          name: true,
+          id: true,
           product_id: true,
+          children: {
+            include: {
+              children_category: {
+                select: {
+                  name: true,
+                  parent_category: {
+                    select: {
+                      name: true,
+                    },
+                  },
+                },
+              },
+            },
+          },
         },
       });
+
       return {
         data: categories,
       };
