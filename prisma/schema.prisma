@@ -254,7 +254,8 @@ model Invoice {
   receiver_address     String
   cart                 Carts                 @relation(fields: [cart_id], references: [id])
   cart_id              Int
-  courier_id           Couriers?
+  courier              Couriers              @relation(fields: [courier_id], references: [id])
+  courier_id           Int
   user                 User                  @relation(fields: [userId], references: [id])
   userId               Int
   Payment              Payment?
@@ -284,13 +285,12 @@ model confirmation_payment {
 }
 
 model Couriers {
-  id                   Int      @id @default(autoincrement())
-  courier_code         String   @unique
+  id                   Int       @id @default(autoincrement())
+  courier_code         String    @unique
   courier_service_name String
-  courier_service_code String   @unique
+  courier_service_code String    @unique
   price                Int
-  invoice              Invoice  @relation(fields: [invoice_id], references: [id])
-  invoice_id           Int      @unique
-  created_at           DateTime @default(now())
-  updated_at           DateTime @updatedAt
+  invoice              Invoice[]
+  created_at           DateTime  @default(now())
+  updated_at           DateTime  @updatedAt
 }

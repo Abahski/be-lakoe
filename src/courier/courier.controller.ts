@@ -17,7 +17,16 @@ export class CourierController {
 
   @Post('create')
   create(@Body() createCourierDto: CreateCourierDto) {
-    return this.courierService.create(createCourierDto);
+    try {
+      try {
+        const invoice = this.courierService.create(createCourierDto);
+        return invoice;
+      } catch (error) {
+        console.log(error);
+      }
+    } catch (error) {
+      console.error('error create courier : ', error);
+    }
   }
 
   @Get()

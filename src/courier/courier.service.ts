@@ -1,4 +1,4 @@
-import { Body, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { CreateCourierDto } from './dto/create-courier.dto';
 // import { UpdateCourierDto } from './dto/update-courier.dto';
 import { PrismaService } from 'src/prisma.service';
@@ -7,25 +7,13 @@ import { UpdateCourierDto } from './dto/update-courier.dto';
 @Injectable()
 export class CourierService {
   constructor(private prisma: PrismaService) {}
-  async create(@Body() createCourierDto: CreateCourierDto) {
+  async create(createCourierDto: CreateCourierDto) {
     try {
-      const { invoice_id } = createCourierDto;
-      const { id } = await this.prisma.invoice.findUnique({
-        where: {
-          id: invoice_id,
-        },
-      });
-      if (!id) {
-        throw new Error('invoice not found');
-      }
       const courier = await this.prisma.couriers.create({
         data: createCourierDto,
       });
 
-      return {
-        message: 'Berhasil, yeayy!!!',
-        data: courier,
-      };
+      return courier;
     } catch (error) {
       console.error('error create courier : ', error);
     }
@@ -40,7 +28,6 @@ export class CourierService {
           courier_service_name: true,
           courier_service_code: true,
           price: true,
-          invoice_id: true,
         },
       });
       return couriers;
@@ -59,7 +46,6 @@ export class CourierService {
           courier_service_name: true,
           courier_service_code: true,
           price: true,
-          invoice_id: true,
         },
       });
       return courier;
