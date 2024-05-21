@@ -3,6 +3,7 @@ import { UpdateCategoryDto } from './dto/update-category.dto';
 import { PrismaService } from 'src/prisma.service';
 import { categoriesValidation } from 'src/util/validation/categories/categoriesCreate';
 import { CreateCategoryDto } from './dto/create-category.dto';
+import { categoriesUpdateValidation } from 'src/util/validation/categories/categoriesUpdate';
 
 @Injectable()
 export class CategoriesService {
@@ -30,17 +31,28 @@ export class CategoriesService {
   async findAll() {
     try {
       const categories = await this.prisma.categories.findMany({
+        where: {
+          parent_id: null,
+        },
         select: {
           id: true,
+          name: true,
           product_id: true,
           children: {
-            include: {
-              children_category: {
+            select: {
+              id: true,
+              name: true,
+              product_id: true,
+              children: {
                 select: {
+                  id: true,
                   name: true,
-                  parent_category: {
+                  product_id: true,
+                  children: {
                     select: {
+                      id: true,
                       name: true,
+                      product_id: true,
                     },
                   },
                 },
@@ -76,7 +88,8 @@ export class CategoriesService {
 
   async update(id: number, updateCategoryDto: UpdateCategoryDto) {
     try {
-      const { error } = categoriesValidation.validate(updateCategoryDto);
+      const { error, value } =
+        categoriesUpdateValidation.validate(updateCategoryDto);
 
       if (error) {
         throw new Error(error.details[0].message);
@@ -93,15 +106,15 @@ export class CategoriesService {
 
       const updatedCategory = await this.prisma.categories.update({
         where: { id: categoryId },
-        data: updateCategoryDto,
+        data: value,
       });
 
       return {
         data: updatedCategory,
-        message: 'Succesfully update category',
+        message: 'Successfully updated category',
       };
     } catch (error) {
-      throw new error('Failed to update category: ' + error.message);
+      throw new Error('Failed to update category: ' + error.message);
     }
   }
 

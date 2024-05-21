@@ -64,16 +64,13 @@ model Products {
 }
 
 model Categories {
-  id                Int          @id @default(autoincrement())
-  name              String
-  product           Products     @relation(fields: [product_id], references: [id])
-  product_id        Int
-  parent_id         Int?
-  parent            Categories?  @relation("parentCategory", fields: [parent_id], references: [id])
-  parent_category   Categories[] @relation("parentCategory")
-  children_id       Int?
-  children          Categories?  @relation("childCategory", fields: [children_id], references: [id])
-  children_category Categories[] @relation("childCategory")
+  id         Int          @id @default(autoincrement())
+  name       String
+  product    Products     @relation(fields: [product_id], references: [id])
+  product_id Int
+  parent_id  Int?
+  parent     Categories?  @relation("CategoryChildren", fields: [parent_id], references: [id])
+  children   Categories[] @relation("CategoryChildren")
 }
 
 model Stores {
