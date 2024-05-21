@@ -229,11 +229,20 @@ model Payment {
   user_id    Int
 }
 
+enum StatusInvoice {
+  BELUM_DIBAYAR
+  PESANAN_BARU
+  SIAP_DIKIRIM
+  DALAM_PENGIRIMAN
+  PESANAN_SELESAI
+  DIBATALKAN
+}
+
 model Invoice {
   id                   Int                   @id @default(autoincrement())
   prices               Int
   service_charge       Int
-  status               String
+  status               StatusInvoice
   receiver_longitude   Float
   receiver_latitude    Float
   receiver_district    String
@@ -253,12 +262,12 @@ model Invoice {
 }
 
 model invoice_history {
-  id         Int      @id @default(autoincrement())
-  status     String
-  invoice    Invoice  @relation(fields: [invoice_id], references: [id])
+  id         Int           @id @default(autoincrement())
+  status     StatusInvoice
+  invoice    Invoice       @relation(fields: [invoice_id], references: [id])
   invoice_id Int
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
+  created_at DateTime      @default(now())
+  updated_at DateTime      @updatedAt
 }
 
 model confirmation_payment {

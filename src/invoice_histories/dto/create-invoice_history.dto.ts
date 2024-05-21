@@ -1,4 +1,6 @@
+import { StatusInvoice } from '@prisma/client';
+
 export class CreateInvoiceHistoryDto {
-  status: string;
+  status: StatusInvoice;
   invoice_id: number;
 }
