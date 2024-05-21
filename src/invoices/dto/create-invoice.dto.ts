@@ -1,7 +1,9 @@
+import { StatusInvoice } from '@prisma/client';
+
 export class CreateInvoiceDto {
   prices: number;
   service_charge: number;
-  status: string;
+  status: StatusInvoice;
   receiver_longitude: number;
   receiver_latitude: number;
   receiver_district: string;
